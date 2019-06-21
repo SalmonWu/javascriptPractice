@@ -1,0 +1,52 @@
+.banner {
+    position: relative;
+    .wrap {
+        display: block;
+        overflow: hidden;
+        img {
+            display: block;
+            width: 100%;
+        }
+    }
+    .btn {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        border: none;
+        background-color: #000;
+        color: #fff;
+        cursor: pointer;
+    }
+    &.opened {
+        .wrap {
+            height: 300px;
+            img {
+                transform: translateY(0);
+            }
+        }
+    }
+    &.opening {
+        .wrap {
+            transition: .5s;
+            img {
+                transition: .5s;
+            }
+        }
+    }
+    &.closed {
+        .wrap {
+            height: 80px;
+            img {
+                transform: translateY(-300px);
+            }
+        }
+    }
+    &.closing {
+        .wrap {
+            transition: .5s;
+            img {
+                transition: .5s;
+            }
+        }
+    }
+}

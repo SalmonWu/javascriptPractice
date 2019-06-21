@@ -120,6 +120,49 @@
 			//==================================//
 
 			//立即调用的函数表达式
+			// 写法一
+			// var tmp = newData;
+			// processData(tmp);
+			// storeData(tmp);
+
+			// 写法二
+			// (function (){
+			// var tmp = newData;
+			// processData(tmp);
+			// storeData(tmp);
+			// }());
+			//==================================//
+
+			//构造函数
+			// var Vehicle = function () {
+			// 	this.price = 1000;
+			// };
+
+			//new 命令 
+			// var Vehicle = function (){
+			// 	this.price = 1000;
+			// };
+
+			// var v = new Vehicle();
+			// v.price // 1000
+			//----------------------------------
+
+			// var Vehicle = function (p) {
+			// 	this.price = p;
+			// };
+
+			// var v = new Vehicle(500);
+			//----------------------------------
+			
+			// var Vehicle = function (){
+			// 	this.price = 1000;
+			// };
+
+			// var v = Vehicle();
+			// price // 1000
+			// v.price // Uncaught TypeError: Cannot read property 'price' of undefined
+			//----------------------------------
+			
 			
 		</script>
 	</body>

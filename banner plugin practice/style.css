@@ -1,0 +1,62 @@
+.banner {
+  position: relative;
+}
+
+.banner .wrap {
+  display: block;
+  overflow: hidden;
+}
+
+.banner .wrap img {
+  display: block;
+  width: 100%;
+}
+
+.banner .btn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  border: none;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
+.banner.opened .wrap {
+  height: 300px;
+}
+
+.banner.opened .wrap img {
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+}
+
+.banner.opening .wrap {
+  -webkit-transition: .5s;
+  transition: .5s;
+}
+
+.banner.opening .wrap img {
+  -webkit-transition: .5s;
+  transition: .5s;
+}
+
+.banner.closed .wrap {
+  height: 80px;
+}
+
+.banner.closed .wrap img {
+  -webkit-transform: translateY(-300px);
+          transform: translateY(-300px);
+}
+
+.banner.closing .wrap {
+  -webkit-transition: .5s;
+  transition: .5s;
+}
+
+.banner.closing .wrap img {
+  -webkit-transition: .5s;
+  transition: .5s;
+}
+/*# sourceMappingURL=style.css.map */
