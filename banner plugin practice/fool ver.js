@@ -6,10 +6,21 @@
 
             if (action == 'open') {
                 // 這邊就是下面 $('.banner')
+                $('.banner').removeClass('closed');
+                $('.banner').addClass('opened');
             } else if (action == 'close') {
                 // 這邊就是下面 $('.banner')
+                $('.banner').removeClass('opened');
+                $('.banner').addClass('closed');
             } else if (action == 'toggle') {
                 // 這邊就是下面 $('.banner')
+                if ($('.banner').hasClass('closed')) {
+                    $('.banner').removeClass('closed');
+                    $('.banner').addClass('opened');
+                } else {
+                    $('.banner').removeClass('opened');
+                    $('.banner').addClass('closed');
+                }
             }
         } else if (typeof action == 'object') {
             /**
