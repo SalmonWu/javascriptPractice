@@ -1,5 +1,7 @@
+@charset "UTF-8";
 .banner {
   position: relative;
+  width: 1200px;
 }
 
 .banner .wrap {
@@ -18,8 +20,25 @@
   bottom: 0;
   border: none;
   background-color: #000;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+.banner .btn:hover {
+  color: #fff;
+}
+
+.banner .btn:focus {
+  outline: none;
+}
+
+.banner .btn::after {
+  content: '▼';
+  display: block;
+  float: right;
+  margin-left: 3px;
 }
 
 .banner.opened .wrap {
@@ -29,6 +48,11 @@
 .banner.opened .wrap img {
   -webkit-transform: translateY(0);
           transform: translateY(0);
+}
+
+.banner.opened .btn::after {
+  -webkit-transform: rotateZ(-180deg);
+          transform: rotateZ(-180deg);
 }
 
 .banner.opening .wrap {
@@ -48,6 +72,11 @@
 .banner.closed .wrap img {
   -webkit-transform: translateY(-300px);
           transform: translateY(-300px);
+}
+
+.banner.closed .btn::after {
+  -webkit-transform: rotateZ(0);
+          transform: rotateZ(0);
 }
 
 .banner.closing .wrap {

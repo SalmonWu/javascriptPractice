@@ -1,49 +1,97 @@
 (function ($) {
     // action 就是下面傳進來的 open, close, 設定值, 或是什麼都不傳
     $.fn.banner = function (action) {
-        if (typeof action == 'string') {
-            // 傳進來是 字串 指令時 $('.banner').banner('open')
-
-            if (action == 'open') {
-                // 這邊就是下面 $('.banner')
-                $('.banner').removeClass('closed');
-                $('.banner').addClass('opened');
-            } else if (action == 'close') {
-                // 這邊就是下面 $('.banner')
-                $('.banner').removeClass('opened');
-                $('.banner').addClass('closed');
-            } else if (action == 'toggle') {
-                // 這邊就是下面 $('.banner')
-                if ($('.banner').hasClass('closed')) {
-                    $('.banner').removeClass('closed');
-                    $('.banner').addClass('opened');
-                } else {
-                    $('.banner').removeClass('opened');
-                    $('.banner').addClass('closed');
+        return this.each(function(){
+            var settings = $.extend({
+                openAtStart: true,
+                autoToggle: 1000,
+                button: {
+                    closeText: '收合', // [string]
+                    openText: '展開', // [string]
+                    class: 'btn' // [string]
+                },
+                class: {
+                    closed: 'closed', // [string]
+                    closing: 'closing', // [string]
+                    opened: 'opened', // [string]
+                    opening: 'opening' // [string]
+                },
+                transition: true,
+                whenTransition: function() {
+                    console.log('whenTransition');
                 }
+            });
+            var CloseText = settings.button.closeText;
+            var OpenText = settings.button.openText;
+            var ClassClosed = settings.class.closed;
+            var ClassClosing = settings.class.closing;
+            var ClassOpen = settings.class.opened;
+            var ClassOpening = settings.class.opening;
+            var ThisBanner = $(this);
+            var ThisBtn = $(this).children('button');
+            var BannerOpen = function(){
+                ThisBtn.removeClass(ClassClosed).addClass(ClassOpen).text(CloseText);
+                ThisBanner.removeClass(ClassClosed).addClass(ClassOpen);
+            };
+            var BannerClose = function(){
+                ThisBtn.removeClass(ClassOpen).addClass(ClassClosed).text(settings.button.openText);
+                ThisBanner.removeClass(ClassOpen).addClass(ClassClosed);
+            };
+            var BannerToggle = function(){
+                var closed = ThisBanner.hasClass(ClassClosed);
+                if (closed) {
+                    ThisBanner.removeClass(ClassClosed).addClass(ClassOpen);
+                    ThisBtn.text(CloseText);
+                } else {
+                    ThisBanner.removeClass(ClassOpen).addClass(ClassClosed);
+                    ThisBtn.text(OpenText);
+                }
+            };
+
+            if (typeof action == 'string') {
+                if (action == 'open') {
+                    BannerOpen();
+                    for(i = 0; i < 5; i++) {
+                        setTimeout(() => {
+                            console.log(i);
+                        }, 1000)
+                    }
+                } else if (action == 'close') {
+                    BannerClose();
+                } else if (action == 'toggle') {
+                    if ($('.banner').hasClass(ClassClosed)) {
+                        BannerOpen();
+                    } else {
+                        BannerClose();
+                    }
+                }
+            } else if (typeof action == 'object') {
+                $(function(){
+                    if (settings.openAtStart == true) {
+                        BannerOpen();
+                    }
+
+                    if (settings.autoToggle == true) {
+                        BannerToggle();
+                    }
+
+                    if (settings.autoToggle != isNaN(settings.autoToggle)) {
+                        setTimeout(() => {
+                            BannerToggle(); 
+                        }, settings.autoToggle);
+                    }
+
+                    if (settings.transition == true) {
+                        
+                    }
+                });
+
+            } else if (action == undefined) {
+                ThisBtn.on('click', function() {
+                    BannerToggle();
+                });  
             }
-        } else if (typeof action == 'object') {
-            /**
-             *  傳進來是 設定值 $('.banner').banner({
-             *      openAtStart: false
-             *  })
-             * */
-
-        } else if (action == undefined) {
-            // 什麼都不傳, 註冊 on click 事件
-        }
-
-        // var closed = $('.banner').hasClass('closed');
-        // $('.btn').on('click', function() {
-        //     closed = $('.banner').hasClass('closed');
-        //     if (closed) {
-        //         $('.banner').removeClass('closed');
-        //         $('.banner').addClass('opened');
-        //     } else {
-        //         $('.banner').removeClass('opened');
-        //         $('.banner').addClass('closed');
-        //     }
-        // });
+        });
     };
 }(jQuery));
 
@@ -79,5 +127,7 @@ $(function () {
     $('.banner').banner('open');
 
     $('.banner').banner('close');
+
+    $('.banner').banner();
 });
 

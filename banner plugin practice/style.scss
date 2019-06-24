@@ -1,5 +1,6 @@
 .banner {
     position: relative;
+    width: 1200px;
     .wrap {
         display: block;
         overflow: hidden;
@@ -14,14 +15,32 @@
         bottom: 0;
         border: none;
         background-color: #000;
-        color: #fff;
+        color: rgba(255, 255, 255, .8);
         cursor: pointer;
+        transition: .3s;
+        &:hover {
+            color: #fff;
+        }
+        &:focus {
+            outline: none;
+        }
+        &::after {
+            content: '▼';
+            display: block;
+            float: right;
+            margin-left: 3px
+        }
     }
     &.opened {
         .wrap {
             height: 300px;
             img {
                 transform: translateY(0);
+            }
+        }
+        .btn {
+            &::after {
+                transform: rotateZ(-180deg)
             }
         }
     }
@@ -38,6 +57,11 @@
             height: 80px;
             img {
                 transform: translateY(-300px);
+            }
+        }
+        .btn {
+            &::after {
+                transform: rotateZ(0)
             }
         }
     }
