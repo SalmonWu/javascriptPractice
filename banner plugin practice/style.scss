@@ -32,7 +32,7 @@
             transform: rotateZ(-180deg);
         }
     }
-    &.opened {
+    &.opened, &.opening {
         .wrap {
             height: 300px;
             img {
@@ -54,7 +54,7 @@
             }
         }
     }
-    &.closed {
+    &.closed, &.closing {
         .wrap {
             height: 80px;
             img {

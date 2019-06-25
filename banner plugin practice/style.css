@@ -43,16 +43,16 @@
           transform: rotateZ(-180deg);
 }
 
-.banner.opened .wrap {
+.banner.opened .wrap, .banner.opening .wrap {
   height: 300px;
 }
 
-.banner.opened .wrap img {
+.banner.opened .wrap img, .banner.opening .wrap img {
   -webkit-transform: translateY(0);
           transform: translateY(0);
 }
 
-.banner.opened .btn::after {
+.banner.opened .btn::after, .banner.opening .btn::after {
   -webkit-transform: rotateZ(-180deg);
           transform: rotateZ(-180deg);
 }
@@ -68,16 +68,16 @@
   transition: .5s;
 }
 
-.banner.closed .wrap {
+.banner.closed .wrap, .banner.closing .wrap {
   height: 80px;
 }
 
-.banner.closed .wrap img {
+.banner.closed .wrap img, .banner.closing .wrap img {
   -webkit-transform: translateY(-300px);
           transform: translateY(-300px);
 }
 
-.banner.closed .btn::after {
+.banner.closed .btn::after, .banner.closing .btn::after {
   -webkit-transform: rotateZ(0);
           transform: rotateZ(0);
 }

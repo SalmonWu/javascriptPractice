@@ -31,26 +31,26 @@
             var ThisBtn = $(this).children('button');
             var BannerOpen = function(){
                 ThisBtn.removeClass(ClassClosed).addClass(ClassOpen).text(CloseText);
-                ThisBanner.removeClass(ClassClosed).addClass(ClassOpen);
-                // setTimeout(function(){
-                //     ThisBanner.removeClass(ClassClosed).addClass(ClassOpening);
-                //     setTimeout(() => {
-                //         ThisBanner.removeClass(ClassOpening).addClass(ClassOpen);
-                //     }, 500);
-                //     settings.whenTransition();
-                // });
+                // ThisBanner.removeClass(ClassClosed).addClass(ClassOpen);
+                setTimeout(function(){
+                    ThisBanner.removeClass(ClassClosed).addClass(ClassOpening);
+                    setTimeout(() => {
+                        ThisBanner.addClass(ClassOpen).removeClass(ClassOpening);
+                    }, 500);
+                    settings.whenTransition();
+                });
             };
 
             var BannerClose = function(){
                 ThisBtn.removeClass(ClassOpen).addClass(ClassClosed).text(OpenText);
-                ThisBanner.removeClass(ClassOpen).addClass(ClassClosed);
-                // setTimeout(function(){
-                //     ThisBanner.removeClass(ClassOpen).addClass(ClassClosing);
-                //     setTimeout(() => {
-                //         ThisBanner.removeClass(ClassClosing).addClass(ClassClosed);
-                //     }, 500);
-                //     settings.whenTransition();
-                // });
+                // ThisBanner.removeClass(ClassOpen).addClass(ClassClosed);
+                setTimeout(function(){
+                    ThisBanner.removeClass(ClassOpen).addClass(ClassClosing);
+                    setTimeout(() => {
+                        ThisBanner.addClass(ClassClosed).removeClass(ClassClosing);
+                    }, 500);
+                    settings.whenTransition();
+                });
             };
             var BannerToggle = function(){
                 var closed = ThisBanner.hasClass(ClassClosed);
