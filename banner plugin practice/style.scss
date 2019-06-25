@@ -29,7 +29,6 @@
             display: block;
             float: right;
             margin-left: 3px;
-            transform: rotateZ(-180deg);
         }
     }
     &.opened, &.opening {
@@ -53,6 +52,11 @@
                 transition: .5s;
             }
         }
+        .btn {
+            &::after {
+                transition: .3s;
+            }
+        }
     }
     &.closed, &.closing {
         .wrap {
@@ -73,6 +77,11 @@
             transition: .5s;
             img {
                 transition: .5s;
+            }
+        }
+        .btn {
+            &::after {
+                transition: .3s;
             }
         }
     }

@@ -39,8 +39,6 @@
   display: block;
   float: right;
   margin-left: 3px;
-  -webkit-transform: rotateZ(-180deg);
-          transform: rotateZ(-180deg);
 }
 
 .banner.opened .wrap, .banner.opening .wrap {
@@ -68,6 +66,11 @@
   transition: .5s;
 }
 
+.banner.opening .btn::after {
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
 .banner.closed .wrap, .banner.closing .wrap {
   height: 80px;
 }
@@ -91,5 +94,10 @@
 .banner.closing .wrap img {
   -webkit-transition: .5s;
   transition: .5s;
+}
+
+.banner.closing .btn::after {
+  -webkit-transition: .3s;
+  transition: .3s;
 }
 /*# sourceMappingURL=style.css.map */
