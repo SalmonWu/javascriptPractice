@@ -3,8 +3,8 @@
     $.fn.banner = function (action) {
         return this.each(function(){
             var settings = $.extend({
-                openAtStart: true,
-                autoToggle: 1000,
+                openAtStart: false,
+                autoToggle: false,
                 button: {
                     closeText: '收合', // [string]
                     openText: '展開', // [string]
@@ -32,30 +32,40 @@
             var BannerOpen = function(){
                 ThisBtn.removeClass(ClassClosed).addClass(ClassOpen).text(CloseText);
                 ThisBanner.removeClass(ClassClosed).addClass(ClassOpen);
+                // setTimeout(function(){
+                //     ThisBanner.removeClass(ClassClosed).addClass(ClassOpening);
+                //     setTimeout(() => {
+                //         ThisBanner.removeClass(ClassOpening).addClass(ClassOpen);
+                //     }, 500);
+                //     settings.whenTransition();
+                // });
             };
+
             var BannerClose = function(){
-                ThisBtn.removeClass(ClassOpen).addClass(ClassClosed).text(settings.button.openText);
+                ThisBtn.removeClass(ClassOpen).addClass(ClassClosed).text(OpenText);
                 ThisBanner.removeClass(ClassOpen).addClass(ClassClosed);
+                // setTimeout(function(){
+                //     ThisBanner.removeClass(ClassOpen).addClass(ClassClosing);
+                //     setTimeout(() => {
+                //         ThisBanner.removeClass(ClassClosing).addClass(ClassClosed);
+                //     }, 500);
+                //     settings.whenTransition();
+                // });
             };
             var BannerToggle = function(){
                 var closed = ThisBanner.hasClass(ClassClosed);
                 if (closed) {
-                    ThisBanner.removeClass(ClassClosed).addClass(ClassOpen);
-                    ThisBtn.text(CloseText);
+                    BannerOpen();
                 } else {
-                    ThisBanner.removeClass(ClassOpen).addClass(ClassClosed);
-                    ThisBtn.text(OpenText);
+                    BannerClose();
                 }
             };
+
+            // ThisBanner.append('<button class=" '+settings.button.class+' "></button>');
 
             if (typeof action == 'string') {
                 if (action == 'open') {
                     BannerOpen();
-                    for(i = 0; i < 5; i++) {
-                        setTimeout(() => {
-                            console.log(i);
-                        }, 1000)
-                    }
                 } else if (action == 'close') {
                     BannerClose();
                 } else if (action == 'toggle') {

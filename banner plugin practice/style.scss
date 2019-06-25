@@ -28,7 +28,8 @@
             content: '▼';
             display: block;
             float: right;
-            margin-left: 3px
+            margin-left: 3px;
+            transform: rotateZ(-180deg);
         }
     }
     &.opened {
@@ -40,12 +41,13 @@
         }
         .btn {
             &::after {
-                transform: rotateZ(-180deg)
+                transform: rotateZ(-180deg);
             }
         }
     }
     &.opening {
         .wrap {
+            height: 300px;
             transition: .5s;
             img {
                 transition: .5s;
@@ -67,6 +69,7 @@
     }
     &.closing {
         .wrap {
+            height: 80px;
             transition: .5s;
             img {
                 transition: .5s;
