@@ -158,10 +158,114 @@
 			// 	this.price = 1000;
 			// };
 
-			// var v = Vehicle();
+			// var v = new Vehicle();
 			// price // 1000
 			// v.price // Uncaught TypeError: Cannot read property 'price' of undefined
+
 			//----------------------------------
+
+			// function Fubar(foo, bar){
+			// 	'use strict';
+			// 	this._foo = foo;
+			// 	this._bar = bar;
+			// }
+
+			// Fubar()
+			// // TypeError: Cannot set property '_foo' of undefined
+			//----------------------------------
+
+			//构造函数的缺点
+			
+			// function Cat (name, color) {
+			// 	this.name = name;
+			// 	this.color = color;
+			// }
+
+			// var cat1 = new Cat('大毛', '白色');
+
+			// cat1.name // '大毛'
+			// cat1.color // '白色'
+			//----------------------------------
+
+			// function Cat(name, color) {
+			// 	this.name = name;
+			// 	this.color = color;
+			// 	this.meow = function () {
+			// 		console.log('mew, mew, mew...');
+			// 	};
+			// }
+
+			// var cat1 = new Cat('大毛', '白色');
+			// var cat2 = new Cat('二毛', '黑色');
+
+			// console.log(cat1.meow === cat2.meow); // false
+			//----------------------------------
+			
+			//prototype属性的作用 & 原型链
+			// function Animal (name) {
+			// 	this.name = name;
+			// }
+
+			// Animal.prototype.color = 'white';
+
+			// var cat1 = new Animal('大毛');
+			// var cat2 = new Animal('二毛');
+
+			// console.log(cat1.color) // 'white'
+			// console.log(cat2.color) // 'white'
+
+			//----------------------------------
+
+			//this關鍵字
+
+			// var person = {
+			// 	name: 'Jive',
+			// 	describe: function () {
+			// 		return 'Name: '+ this.name;
+			// 	}
+			// };
+
+			// console.log(person.describe())// "Name: Jive"
+			//----------------------------------
+			
+			var A = {
+				name: 'Jive',
+				describe: function () {
+					return 'Name: '+ this.name;
+				}
+			};
+
+			var B = {
+				name: 'James'
+			};
+
+			B.describe = A.describe;
+			console.log(B.describe());
+			// "Name: James"
+
+
+
+
+
+
+
+			// 
+			// var counter = {
+			// 	count: 0,
+			// 	inc: function () {
+			// 		this.count++;
+			// 	}
+			// };
+
+			// var obj = {
+			// 	count: 100
+			// };
+
+			// var func = counter.inc.bind( obj );
+			// func();
+			// console.log( obj.count );// 1 **//101
+			//----------------------------------
+
 			
 			
 		</script>

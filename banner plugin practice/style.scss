@@ -48,9 +48,6 @@
         .wrap {
             height: 300px;
             transition: .5s;
-            img {
-                transition: .5s;
-            }
         }
         .btn {
             &::after {
@@ -75,9 +72,6 @@
         .wrap {
             height: 80px;
             transition: .5s;
-            img {
-                transition: .5s;
-            }
         }
         .btn {
             &::after {

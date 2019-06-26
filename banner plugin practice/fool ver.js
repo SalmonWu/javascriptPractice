@@ -1,9 +1,8 @@
 (function ($) {
-    // action 就是下面傳進來的 open, close, 設定值, 或是什麼都不傳
     $.fn.banner = function (action) {
         var settings = $.extend({
             openAtStart: true,
-            autoToggle: true,
+            autoToggle: 1000,
             button: {
                 closeText: '收合', // [string]
                 openText: '展開', // [string]
@@ -47,7 +46,7 @@
             });
         }
         var BannerOpen = function(){
-            ThisBtn.removeClass(ClassClosed).addClass(ClassOpen).text(CloseText);
+            ThisBtn.removeClass(ClassClosed).addClass(ClassOpen).html(CloseText);
             if (settings.transition == true) {
                 TransitonOpen();
             } else {
@@ -57,7 +56,7 @@
         };
 
         var BannerClose = function(){
-            ThisBtn.removeClass(ClassOpen).addClass(ClassClosed).text(OpenText);
+            ThisBtn.removeClass(ClassOpen).addClass(ClassClosed).html(OpenText);
             if (settings.transition == true) { 
                 TransitonClose();
             } else {
@@ -80,7 +79,7 @@
                 } else if (action == 'close') {
                     BannerClose();
                 } else if (action == 'toggle') {
-                    if ($('.banner').hasClass(ClassClosed)) {
+                    if (ThisBanner.hasClass(ClassClosed)) {
                         BannerOpen();
                     } else {
                         BannerClose();
@@ -101,17 +100,14 @@
                             BannerToggle(); 
                         }, settings.autoToggle);
                     }
-
-                    if (settings.transition == true) {
-                        
-                    }
                 });
 
             } else if (action == undefined) {
-                ThisBanner.append('<button class="'+settings.button.class+'"></button>');
+                ThisBanner.append('<button class="'+settings.button.class+'">'+(settings.openAtStart && settings.autoToggle ? settings.button.openText : settings.button.closeText)+'</button>');
+                ThisBtn = $(this).children('.'+settings.button.class);
                 $(this).children('button').on('click', function() {
                     BannerToggle();
-                });  
+                });
             }
         });
     };
@@ -144,12 +140,11 @@ $(function () {
         }
     });
 
-    $('.banner').banner('toggle');
+    // $('.banner').banner('toggle');
 
-    $('.banner').banner('open');
+    // $('.banner').banner('open');
 
-    $('.banner').banner('close');
+    // $('.banner').banner('close');
 
     $('.banner').banner();
 });
-

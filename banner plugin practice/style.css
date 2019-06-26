@@ -61,11 +61,6 @@
   transition: .5s;
 }
 
-.banner.opening .wrap img {
-  -webkit-transition: .5s;
-  transition: .5s;
-}
-
 .banner.opening .btn::after {
   -webkit-transition: .3s;
   transition: .3s;
@@ -87,11 +82,6 @@
 
 .banner.closing .wrap {
   height: 80px;
-  -webkit-transition: .5s;
-  transition: .5s;
-}
-
-.banner.closing .wrap img {
   -webkit-transition: .5s;
   transition: .5s;
 }
