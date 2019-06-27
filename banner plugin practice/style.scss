@@ -1,6 +1,7 @@
 .banner {
     position: relative;
     width: 1200px;
+    margin: 0 auto;
     .wrap {
         display: block;
         overflow: hidden;
@@ -46,7 +47,6 @@
     }
     &.opening {
         .wrap {
-            height: 300px;
             transition: .5s;
         }
         .btn {
@@ -70,7 +70,6 @@
     }
     &.closing {
         .wrap {
-            height: 80px;
             transition: .5s;
         }
         .btn {

@@ -290,11 +290,60 @@
 			// obj.foo() // obj
 
 			//使用注意点
+			// var o = {
+			// f1: function () {
+			// 	console.log(this);
+			// 	var f2 = function () {
+			// 		console.log(this);
+			// 	}();
+			// }
+			// }
+
+			// o.f1()
+			// Object
+			// Window
+			//----------------------------------
 			
+			// var o = {
+			// f1: function() {
+			// 	console.log(this);
+			// 	var self = this;
+			// 	var f2 = function() {
+			// 		console.log(self);
+			// 	}();
+			// }
+			// }
 
+			// o.f1()
+			// Object //** f1
+			// Object //** f1
+			//----------------------------------
+			
+			// var counter = {
+			// 	count: 0
+			// };
+			// counter.inc = function () {
+			// 	'use strict';
+			// 	this.count++
+			// };
+			// var f = counter.inc;
+			// f()
+			// TypeError: Cannot read property 'count' of undefined
+			//----------------------------------
 
+			//绑定 this 的方法：call、apply、bind
 
+			//function.prototype.call()
+			//----------------------------------
 
+			var obj = {};
+
+			var f = function () {
+				return this;
+			};
+
+			console.log(f() === window);
+			console.log(f.call(obj) === obj);
 			// 
 			// var counter = {
 			// 	count: 0,

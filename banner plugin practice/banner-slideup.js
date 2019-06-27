@@ -6,8 +6,7 @@
 		this.ele = ele;
 		this.$ele = $(ele);
         this.option = options;
-        
-	};
+    };
     
 	Module.DEFAULTS = {
 		openAtStart: true,
@@ -29,47 +28,58 @@
         }
     };
 
-    var CloseText = Module.DEFAULTS.button.closeText;
-    var OpenText = Module.DEFAULTS.button.openText;
-    var ClassClosed = Module.DEFAULTS.class.closed;
-    var ClassClosing = Module.DEFAULTS.class.closing;
-    var ClassOpen = Module.DEFAULTS.class.opened;
-    var ClassOpening = Module.DEFAULTS.class.opening;
-
-    var TransitonOpen = function($ele, options){
+    var TransitonOpen = function($ele, options) {
         $ele
             .children('.' + options.button.class)
-            .removeClass(ClassClosed)
-            .addClass(ClassOpen)
-            .text(CloseText);
+            .removeClass(options.class.closed)
+            .addClass(options.class.opened)
+            .text(options.button.closeText);
 
         setTimeout(function(){
-            $ele.removeClass(ClassClosed).addClass(ClassOpening);
+            $ele
+                .removeClass(options.class.closed)
+                .addClass(options.class.opening);
             setTimeout(function() {
-                $ele.addClass(ClassOpen).removeClass(ClassOpening);
-            }, 300);
+                $ele
+                    .addClass(options.class.opened)
+                    .removeClass(options.class.opening);
+            }, 500);
+
             options.whenTransition();
-        });
+        },);
     }
-    var TransitonClose = function($ele, options){
+
+    var TransitonClose = function($ele, options) {
         $ele
             .children('.' + options.button.class)
-            .removeClass(ClassOpen)
-            .addClass(ClassClosed)
-            .text(OpenText);
+            .removeClass(options.class.opened)
+            .addClass(options.class.closed)
+            .text(options.button.openText);
 
         setTimeout(function(){
-            $ele.removeClass(ClassOpen).addClass(ClassClosing);
+            $ele
+                .removeClass(options.class.opened)
+                .addClass(options.class.closing);
+
             setTimeout(function() {
-                $ele.addClass(ClassClosed).removeClass(ClassClosing);
-            }, 300);
+                $ele
+                    .addClass(options.class.closed)
+                    .removeClass(options.class.closing);
+            }, 500);
+
             options.whenTransition();
-        });
+        },);
     }
 
     Module.prototype.init = function () {
         var that = this;
         $(this.$ele).append('<button class="'+this.option.button.class+'"></button>');
+
+        if (this.option.openAtStart) {
+            this.open();
+        } else {
+            this.close();
+        }
 
         if (this.option.autoToggle === true) {
             that.toggle();
@@ -78,11 +88,7 @@
         if (this.option.autoToggle !== isNaN(this.option.autoToggle)) {
             setTimeout(function() {
                 that.toggle();
-        }, this.option.autoToggle);
-        }
-
-        if (this.option.openAtStart) {
-            this.open();
+            }, this.option.autoToggle);
         }
 
         var ThisBtn = $(this.$ele).children('.' + this.option.button.class);
@@ -97,13 +103,16 @@
         } else {
             $(this.$ele)
                 .children('.' + this.option.button.class)
-                .removeClass(ClassClosed)
-                .addClass(ClassOpen)
-                .text(CloseText);
+                .removeClass(this.option.class.closed)
+                .addClass(this.option.class.opened)
+                .text(this.option.button.closeText);
 
             $(this.$ele)
-                .removeClass(ClassClosed)
-                .addClass(ClassOpen);
+                .removeClass('closed')
+                .addClass('opened');
+            $(this.$ele)
+                .removeClass(this.option.class.closed)
+                .addClass(this.option.class.opened);
         }
 	};
 
@@ -113,31 +122,33 @@
         } else {
             $(this.$ele)
                 .children('.' + this.option.button.class)
-                .removeClass(ClassOpen)
-                .addClass(ClassClosed)
-                .text(OpenText);
+                .removeClass(this.option.class.opened)
+                .addClass(this.option.class.closed)
+                .text(this.option.button.openText);
 
             $(this.$ele)
-                .removeClass(ClassOpen)
-                .addClass(ClassClosed);
+                .removeClass('opened')
+                .addClass('closed');
+            $(this.$ele)
+                .removeClass(this.option.class.opened)
+                .addClass(this.option.class.closed);
         }
     };
     
     Module.prototype.toggle = function () {
-        var closed = $(this.$ele).hasClass(ClassClosed);
-            if (closed) {
-                this.open();
-            } else {
-                this.close();
-            }
+        if ($(this.$ele).hasClass(this.option.class.closed)) {
+            this.open();
+        } else {
+            this.close();
+        }
     };
 
     $.fn[ModuleName] = function ( methods, options ) {
 		return this.each(function() {
 			var $this = $(this);
 			var module = $this.data( ModuleName );
+            var opts = null;
 
-			var opts = null;
 			if ( !!module ) {
 				if ( typeof options === 'string') {
                     module.open();
@@ -168,26 +179,26 @@ $(function () {
         // 設定一開始是否為開或合
         openAtStart: true, // [boolean] true | false
         // 設定啟動後是否要自動開或合，若設為false，就不要自勳開合；若為true是馬上自動開合；若為數字是幾毫秒之後開合
-        autoToggle: 1500, // [boolean|number] true | false | 3000
+        autoToggle: 300, // [boolean|number] true | false | 3000
         // 設定收合展開按鈕
-        button: {
-            closeText: '收合', // [string]
-            openText: '展開', // [string]
-            class: 'btn' // [string]
-        },
+        // button: {
+        //     closeText: '收', // [string]
+        //     openText: '開', // [string]
+        //     class: 'btn' // [string]
+        // },
         // 設定模組在各狀態時的class
-        class: {
-            closed: 'closed', // [string]
-            closing: 'closing', // [string]
-            opened: 'opened', // [string]
-            opening: 'opening' // [string]
-        },
+        // class: {
+        //     closed: 'clo', // [string]
+        //     closing: 'cloing', // [string]
+        //     opened: 'op', // [string]
+        //     opening: 'oping' // [string]
+        // },
         // 是否要有transition效果
         transition: true,
         // 當有transition時，要執行的callback function
-        whenTransition: function () {
-            console.log('whenTransition');
-        }
+        // whenTransition: function () {
+
+        // }
     });
 
     // $('.banner').banner('toggle');
@@ -195,6 +206,4 @@ $(function () {
     // $('.banner').banner('open');
     //
     // $('.banner').banner('close');
-
-    // $('.banner').banner();
 });
