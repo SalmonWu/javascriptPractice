@@ -228,23 +228,69 @@
 			// console.log(person.describe())// "Name: Jive"
 			//----------------------------------
 			
-			var A = {
-				name: 'Jive',
-				describe: function () {
-					return 'Name: '+ this.name;
-				}
-			};
+			// var A = {
+			// 	name: 'Jive',
+			// 	describe: function () {
+			// 		return 'Name: '+ this.name;
+			// 	}
+			// };
 
-			var B = {
-				name: 'James'
-			};
+			// var B = {
+			// 	name: 'James'
+			// };
 
-			B.describe = A.describe;
-			console.log(B.describe());
-			// "Name: James"
+			// B.describe = A.describe;
+			// console.log(B.describe());// "Name: James"
+			//----------------------------------
+			
+			// function f() {
+			// 	return '姓名：'+ this.name;
+			// }
 
+			// var A = {
+			// 	name: '张三',
+			// 	describe: f
+			// };
 
+			// var B = {
+			// 	name: '李四',
+			// 	describe: f
+			// };
 
+			// console.log(A.describe()) // "姓名：张三"
+			// console.log(B.describe()) // "姓名：李四"
+			//----------------------------------
+
+			//this 使用情境
+
+			//全局环境
+			// console.log(this === window); // true
+			
+			//构造函数
+			// var Obj = function (p) {
+			// 	this.p = p;
+			// };
+
+			// Obj.prototype.m = function() {
+			// 	return this.p;
+			// };
+
+			// var o = new Obj('Hello World!');
+
+			// console.log(o.p) // "Hello World!"
+			// console.log(o.m()) // "Hello World!"
+
+			//对象的方法
+			// var obj ={
+			// 	foo: function () {
+			// 		console.log(this);
+			// 	}
+			// };
+
+			// obj.foo() // obj
+
+			//使用注意点
+			
 
 
 
