@@ -39,24 +39,19 @@
     var TransitonOpen = function($ele, options){
         $ele
             .children('.' + options.button.class)
-            .removeClass(ClassOpen)
-            .addClass(ClassClosed)
+            .removeClass(ClassClosed)
+            .addClass(ClassOpen)
             .text(CloseText);
 
         setTimeout(function(){
-            console.log('transition opening');
-
             $ele.removeClass(ClassClosed).addClass(ClassOpening);
             setTimeout(function() {
-                console.log('transition opened');
-
                 $ele.addClass(ClassOpen).removeClass(ClassOpening);
-            }, 200);
+            }, 300);
             options.whenTransition();
         });
     }
     var TransitonClose = function($ele, options){
-
         $ele
             .children('.' + options.button.class)
             .removeClass(ClassOpen)
@@ -67,18 +62,14 @@
             $ele.removeClass(ClassOpen).addClass(ClassClosing);
             setTimeout(function() {
                 $ele.addClass(ClassClosed).removeClass(ClassClosing);
-            }, 200);
+            }, 300);
             options.whenTransition();
         });
     }
 
     Module.prototype.init = function () {
-        console.log(this.option);
-
         var that = this;
         $(this.$ele).append('<button class="'+this.option.button.class+'"></button>');
-
-        this.close();
 
         if (this.option.autoToggle === true) {
             that.toggle();
@@ -142,8 +133,6 @@
     };
 
     $.fn[ModuleName] = function ( methods, options ) {
-        console.log(methods, options);
-
 		return this.each(function() {
 			var $this = $(this);
 			var module = $this.data( ModuleName );
@@ -179,7 +168,7 @@ $(function () {
         // 設定一開始是否為開或合
         openAtStart: true, // [boolean] true | false
         // 設定啟動後是否要自動開或合，若設為false，就不要自勳開合；若為true是馬上自動開合；若為數字是幾毫秒之後開合
-        autoToggle: false, // [boolean|number] true | false | 3000
+        autoToggle: 1500, // [boolean|number] true | false | 3000
         // 設定收合展開按鈕
         button: {
             closeText: '收合', // [string]
