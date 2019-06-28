@@ -1,0 +1,81 @@
+.banner {
+    position: relative;
+    width: 1200px;
+    margin: 0 auto;
+    .wrap {
+        display: block;
+        overflow: hidden;
+        img {
+            display: block;
+            width: 100%;
+        }
+    }
+    .btn {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        border: none;
+        background-color: #000;
+        color: rgba(255, 255, 255, .8);
+        cursor: pointer;
+        transition: .3s;
+        &:hover {
+            color: #fff;
+        }
+        &:focus {
+            outline: none;
+        }
+        &::after {
+            content: '▼';
+            display: block;
+            float: right;
+            margin-left: 3px;
+        }
+    }
+    &.opened, &.opening {
+        .wrap {
+            height: 300px;
+            img {
+                transform: translateY(0);
+            }
+        }
+        .btn {
+            &::after {
+                transform: rotateZ(-180deg);
+            }
+        }
+    }
+    &.opening {
+        .wrap {
+            transition: .5s;
+        }
+        .btn {
+            &::after {
+                transition: .3s;
+            }
+        }
+    }
+    &.closed, &.closing {
+        .wrap {
+            height: 80px;
+            img {
+                transform: translateY(-300px);
+            }
+        }
+        .btn {
+            &::after {
+                transform: rotateZ(0)
+            }
+        }
+    }
+    &.closing {
+        .wrap {
+            transition: .5s;
+        }
+        .btn {
+            &::after {
+                transition: .3s;
+            }
+        }
+    }
+}
