@@ -4,7 +4,7 @@ import './stylesheets/style.css';
 import Banner from './Banner';
 
 ReactDOM.render(<Banner
-    openAtStart={this.props}
-    autoToggle={this.props}
-    transition={this.props}
+    openAtStart = { true }
+    autoToggle = { true }
+    transition = { false }
     />, document.getElementById('root'));
