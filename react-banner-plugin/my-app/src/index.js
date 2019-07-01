@@ -3,8 +3,25 @@ import ReactDOM from 'react-dom';
 import './stylesheets/style.css';
 import Banner from './Banner';
 
-ReactDOM.render(<Banner
-    openAtStart = { true }
-    autoToggle = { true }
-    transition = { false }
-    />, document.getElementById('root'));
+const setting = {
+    title: 'banner',
+    openAtStart: true, // [boolean] true | false
+    autoToggle: 3000, // [boolean|number] true | false | 3000
+    button: {
+        closeText: '收合', // [string]
+        openText: '展開', // [string]
+        class: 'btn' // [string]
+    },
+    class: {
+        closed: 'closed', // [string]
+        closing: 'closing', // [string]
+        opened: 'opened', // [string]
+        opening: 'opening' // [string]
+    },
+    transition: true,
+    whenTransition: function() {
+        console.log('whenTransition');
+    }
+}
+
+ReactDOM.render(<Banner {...setting}/>, document.getElementById('root'));

@@ -23,22 +23,31 @@ class Banner extends Component {
         }
     }
 
-    constructor(props) {
-        super(props); 
-            let openAtStart = this.props.openAtStart
-            let autoToggle = this.props.autoToggle
-            let transition = this.props.transition
-            console.log(transition)
+    componentDidMount(){
+        // merge props into state.
+        this.setState((state, props) => {
+            return props;
+        }, () =>{
+            if (this.state.autoToggle)  {
+                this.toggle();
+                if (!isNaN(this.state.autoToggle)) {
+                    setTimeout(() => {
+                        this.toggle();
+                    }, this.state.autoToggle)
+                }
+            }
+        })
+        
     }
 
     open() {
         this.setState({openAtStart: true})
-        console.log('open');
+        this.transition();
     }
 
     close() {
         this.setState({openAtStart: false})
-        console.log('close');
+        this.transition();
     }
 
     toggle() {
@@ -51,7 +60,7 @@ class Banner extends Component {
     transition() {
         if (this.state.transition) 
             setTimeout(() => {
-                
+              this.state.whenTransition();  
             });
     }
 
@@ -60,20 +69,21 @@ class Banner extends Component {
     }
 
     render() {
-        console.log(this.props.openAtStart)
-        var buttonClass = 'btn' + ' ' + this.state.button.class
-        var buttonText = !this.state.openAtStart ? this.state.button.openText : this.state.button.closeText
-        var bannerClass
-        if(this.state.openAtStart) 
-            if (this.state.transition)
-                bannerClass = 'opening' + ' ' + this.state.class.opening;
-            else 
-                bannerClass = 'opened' + ' ' + this.state.class.opened
-        else
-            if (this.state.transition) 
-                bannerClass = 'colsing' + ' ' + this.state.class.closing
-            else 
-                bannerClass = 'closed' + ' ' + this.state.class.closed
+        // console.log(this.props);
+        let buttonClass = 'btn' + ' ' + this.state.button.class
+        let buttonText = !this.state.openAtStart ? this.state.button.openText : this.state.button.closeText
+        let bannerClass
+
+        if(this.state.openAtStart) {
+            bannerClass = this.state.transition 
+                ? 'opening' + ' ' + this.state.class.opening 
+                : 'opened' + ' ' + this.state.class.opened
+        } else {
+            bannerClass = this.state.transition 
+                ? 'colsing' + ' ' + this.state.class.closing
+                : 'closed' + ' ' + this.state.class.closed
+        }
+
         return <div 
             className={this.state.title + ' ' + bannerClass} >
             <div className='wrap'>
