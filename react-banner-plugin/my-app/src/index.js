@@ -5,8 +5,8 @@ import Banner from './Banner';
 
 const setting = {
     title: 'banner',
-    openAtStart: true, // [boolean] true | false
-    autoToggle: 3000, // [boolean|number] true | false | 3000
+    openAtStart: false, // [boolean] true | false
+    autoToggle: 1500, // [boolean|number] true | false | 3000
     button: {
         closeText: '收合', // [string]
         openText: '展開', // [string]

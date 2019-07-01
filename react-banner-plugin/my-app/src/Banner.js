@@ -29,11 +29,12 @@ class Banner extends Component {
             return props;
         }, () =>{
             if (this.state.autoToggle)  {
-                this.toggle();
                 if (!isNaN(this.state.autoToggle)) {
                     setTimeout(() => {
                         this.toggle();
                     }, this.state.autoToggle)
+                } else {
+                    this.toggle();
                 }
             }
         })
