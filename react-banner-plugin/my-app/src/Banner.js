@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import bannerImg from "./imgs/1200x380.png";
 
 class Banner extends Component {
@@ -70,7 +71,6 @@ class Banner extends Component {
     }
 
     render() {
-        // console.log(this.props);
         let buttonClass = "btn" + " " + this.state.button.class;
         let buttonText = !this.state.openAtStart
             ? this.state.button.openText
@@ -102,5 +102,24 @@ class Banner extends Component {
         );
     }
 }
+
+Banner.propTypes = {
+    title: PropTypes.string,
+    openAtStart: PropTypes.bool,
+    autoToggle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    button: PropTypes.exact({
+        class: PropTypes.string,
+        closeText: PropTypes.string,
+        openText: PropTypes.string
+    }),
+    class: PropTypes.exact({
+        closed: PropTypes.string,
+        closing: PropTypes.string,
+        opened: PropTypes.string,
+        opening: PropTypes.string
+    }),
+    transition: PropTypes.bool,
+    whenTransition: PropTypes.func.isRequired
+};
 
 export default Banner;
