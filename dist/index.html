@@ -502,6 +502,33 @@
 		// true
 		// ''
 		// true
+		
+		function generatePyramid() {
+			var totalNumber = ''
+			for (var i = 1; i <= 5; i++) {
+				for (var j = 1; j <= i; j++) {
+					totalNumber += j + " ";
+				}
+				console.log(totalNumber);
+				totalNumber="";
+			}
+		};
+
+		generatePyramid()
+		
+
+		// function generatePyramid() {
+		// 	var totalNumberofRows = 5;
+		// 	var output="";
+		// 	for (var i = 1; i <= totalNumberofRows; i++) {
+		// 		for (var j = 1; j <= i; j++) {
+		// 			output+=j + "     ";
+		// 		}
+		// 		console.log(output);
+		// 		output="";
+		// 	}
+		// }  
+		// generatePyramid();
 
 	</script>
 </body>

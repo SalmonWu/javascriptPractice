@@ -1,9 +1,89 @@
 $dark: #444444
 $gray-dark: #666666
 $gray: #999999
+$gray-light: #f7f7f7
 $gray-blue: #eaedf2
-$blue: #0077b3
 $green: #24a07c
+$pink: #fe8b88
+$yellow: #fff9e3
+$cheapest: #ff8e26
+$border: #e1e2e4
     
 body 
     color: $dark
+    font-family: sans-serif, Arial, 微軟正黑體
+
+.fztable
+    max-width: 960px
+    margin: 0 auto
+    .table 
+        display: table
+        border-collapse: collapse
+        width: 100%
+        border: 1px solid $border
+        .thead 
+            display: table-header-group
+            .th
+                background-color: $gray-blue
+                color: $gray-dark
+                &.title 
+                    max-width: 88px
+                    padding: 4px
+                    p 
+                            margin: 0
+                            text-align: left
+                            &:first-child 
+                                text-align: right
+        .tbody
+            display: table-row-group
+            .th 
+                background-color: #f1f1f1
+            .tr 
+                &:last-of-type
+                    .th, .td 
+                        border-bottom: 0
+        .tr 
+            display: table-row
+        .th, .td 
+            display: table-cell
+            width: calc((100% - 88px) / 7)
+            height: 50px
+            border-right: 1px solid $border
+            border-bottom: 1px solid $border
+            box-sizing: border-box
+            color: $gray
+            font-size: 0.875rem
+            vertical-align: middle
+            text-align: center
+            &:last-of-type
+                border-right: 0 
+        .td
+            &.cheapest
+                position: relative
+                &::before 
+                    content: "最便宜"
+                    display: block
+                    position: absolute
+                    top: 0
+                    left: 0
+                    width: 0
+                    height: 0
+                    border-width: 10px 
+                    border-color: $cheapest transparent transparent $cheapest
+                    border-style: solid 
+                    color: $cheapest
+                    font-size: 0.75rem
+                    text-indent: 10px 
+                    line-height: 0
+                    white-space: nowrap
+
+            &.seleted
+                background-color: $gray-light
+            &.active, &:hover 
+                background-color: $yellow
+                
+            .price
+                color: $dark
+                margin-right: 3px
+
+        .th 
