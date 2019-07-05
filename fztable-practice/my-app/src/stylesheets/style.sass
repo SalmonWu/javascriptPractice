@@ -18,34 +18,15 @@ body
     margin: 0 auto
     .table 
         display: table
+        position: relative
         border-collapse: collapse
         width: 100%
         border: 1px solid $border
-        .thead 
-            display: table-header-group
-            .th
-                background-color: $gray-blue
-                color: $gray-dark
-                &.title 
-                    max-width: 88px
-                    padding: 4px
-                    p 
-                            margin: 0
-                            text-align: left
-                            &:first-child 
-                                text-align: right
-        .tbody
-            display: table-row-group
-            .th 
-                background-color: #f1f1f1
-            .tr 
-                &:last-of-type
-                    .th, .td 
-                        border-bottom: 0
         .tr 
             display: table-row
         .th, .td 
             display: table-cell
+            position: relative
             width: calc((100% - 88px) / 7)
             height: 50px
             border-right: 1px solid $border
@@ -57,9 +38,18 @@ body
             text-align: center
             &:last-of-type
                 border-right: 0 
+        .th 
+            &.new-year
+                &:before
+                    content: attr(data-year)
+                    display: block
+                    position: absolute
+                    top: 2px
+                    right: calc(50% - 32px)
+                    color: $green
+                    font-size: 0.75rem
         .td
             &.cheapest
-                position: relative
                 &::before 
                     content: "最便宜"
                     display: block
@@ -76,14 +66,63 @@ body
                     text-indent: 10px 
                     line-height: 0
                     white-space: nowrap
-
             &.seleted
+                background-color: $gray-light
+            &.selected
                 background-color: $gray-light
             &.active, &:hover 
                 background-color: $yellow
-                
+                &:after 
+                    content: ""
+                    display: block
+                    position: absolute
+                    top: -1px
+                    left: -1px
+                    z-index: 10
+                    width: 100%
+                    height: 100% 
+                    border: 1px solid $pink
+                    background-color: transparent
             .price
                 color: $dark
                 margin-right: 3px
-
-        .th 
+        .thead 
+            display: table-header-group
+            .th
+                background-color: $gray-blue
+                color: $gray-dark
+                &.title 
+                    max-width: 88px
+                    padding: 4px
+                    p 
+                            margin: 0
+                            text-align: left
+                            &:first-child 
+                                text-align: right
+        .tbody
+            display: table-row-group
+            .th 
+                width: 88px
+                background-color: #f1f1f1
+            .tr 
+                &:last-of-type
+                    .th, .td 
+                        border-bottom: 0
+    .btn 
+        position: absolute
+        top: calc(50% - 20px)
+        z-index: 9
+        width: 20px
+        height: 40px
+        border: 0
+        cursor: pointer
+        &:focus 
+            outline: 0
+        &.btn-prev
+            left: 88px
+            background: rgba(171, 171, 171, .5) url(../imgs/arrow-prev.png) center center no-repeat
+        &.btn-next
+            right: 0
+            background: rgba(171, 171, 171, .5) url(../imgs/arrow-next.png) center center no-repeat
+        &.disabled
+            display: none

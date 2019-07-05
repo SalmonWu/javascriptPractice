@@ -5,12 +5,9 @@ class Fztable extends Component {
     state = { 'tripData': TripData.data }
     renderTableHeader() {
         const { tripData } = this.state;
-        // console.log(tripData);
-        const createTd = tripData.map(({ date }, index) => {
-            // console.log(ele.date)
-            // console.log(date)
+        const createTd = tripData.map(({ date, date_year }, index) => {
             return (
-                <div key={date} className="th">{date}</div>
+                <div key={date} className={`th ${date_year ? 'new-year' : ''}`} data-year={date_year}>{date}</div>
             )
         })
         return createTd
@@ -18,19 +15,29 @@ class Fztable extends Component {
 
     renderTableRow() {
         const { tripData } = this.state;
-        const createTr = tripData.map(({ data }, index) => {
+        const createTr = tripData.map(({ data, date_year }, index) => {
             return (
                 <div className="tr" key={index}>
                     {
-                        data.map((row, index) => {
-                            const { date_tripStart, price } = row
+                        data.map((row, index2) => {
+                            const { date_tripStart, price, isTheCheapest } = row
                             return (
-                                <React.Fragment key={index}>
-                                    {index === 0 && <div className="th">{date_tripStart}</div>}
-                                    <div className="td">{
-                                        !isNaN(price) ?
-                                            <><span className="price">${price.toLocaleString()}</span><span>起</span></> :
-                                            <span>{price}</span>}
+                                <React.Fragment key={index2}>
+                                    {index2 === 0 &&
+                                        <div className={`th ${date_year ? 'new-year' : ''}`}
+                                            data-year={date_year}>
+                                            {date_tripStart}
+                                        </div>
+                                    }
+                                    <div className={`td ${isTheCheapest ? 'cheapest' : ''}`} onClick={
+                                        e => console.log(index, index2)
+                                    }>{
+                                            !isNaN(price) ?
+                                                <>
+                                                    <span className="price">${price.toLocaleString()}</span>
+                                                    <span>起</span>
+                                                </> :
+                                                <span>{price}</span>}
                                     </div>
                                 </React.Fragment>
                             )
@@ -47,6 +54,8 @@ class Fztable extends Component {
             <div className="fztable">
                 <h1 id='title'>React Dynamic Table</h1>
                 <div className="table">
+                    <button className="btn btn-prev"></button>
+                    <button className="btn btn-next"></button>
                     <div className="thead">
                         <div className="tr">
                             <div className="th title">
