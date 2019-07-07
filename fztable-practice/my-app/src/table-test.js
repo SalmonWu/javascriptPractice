@@ -2,15 +2,72 @@ import React, { Component } from "react";
 import TripData from "./data/tripData.json";
 
 class Fztable extends Component {
-    state = { 'tripData': TripData.data }
+    constructor(props) {
+        super(props)
+
+        this.btnNext = this.btnNext.bind(this)
+        this.btnPrev = this.btnPrev.bind(this)
+    }
+
+    state = { 
+        'tripData': TripData.data,
+        currentBox: {
+            x: -1,
+            y: -1
+        }, 
+        frameSize: 3,
+        tablePage: 1
+    }
+
+    btnNext() {
+        console.log('Next')
+        this.setState({tablePage: this.state.tablePage + 1})
+    }
+
+    btnPrev() {
+        console.log('Prev')
+        this.setState({tablePage: this.state.tablePage - 1})
+    }
+
+    setCurrentBox(x, y) {
+        this.setState({
+            currentBox: {
+                x, y
+            }
+        })
+    }
+
+    isCurrentPage(index) {
+        return (index < (this.state.frameSize * this.state.tablePage) 
+            && index >= (this.state.tablePage - 1) * this.state.frameSize) 
+    }
+
     renderTableHeader() {
         const { tripData } = this.state;
         const createTd = tripData.map(({ date, date_year }, index) => {
             return (
-                <div key={date} className={`th ${date_year ? 'new-year' : ''}`} data-year={date_year}>{date}</div>
+                <div key={date} 
+                    className={[
+                        'th',
+                        date_year ? 'new-year' : '',
+                        this.isCurrentPage(index) ? '' : ''
+                    ].join(' ')} 
+                data-year={date_year}>{date}</div>
             )
         })
         return createTd
+    }
+
+    rowDate() {
+        return this.state.tripData
+        .map((value, index) => {
+            return (
+                <div className={`th col-date ${value.date_year ? 'new-year' : ''}`}
+                                            data-year={value.date_year}>
+                                            {value.date}
+                                        </div>
+            )
+        })
     }
 
     renderTableRow() {
@@ -21,16 +78,23 @@ class Fztable extends Component {
                     {
                         data.map((row, index2) => {
                             const { date_tripStart, price, isTheCheapest } = row
+
                             return (
                                 <React.Fragment key={index2}>
-                                    {index2 === 0 &&
+                                    {/* {index2 === 0 &&
                                         <div className={`th ${date_year ? 'new-year' : ''}`}
                                             data-year={date_year}>
                                             {date_tripStart}
                                         </div>
-                                    }
-                                    <div className={`td ${isTheCheapest ? 'cheapest' : ''}`} onClick={
-                                        e => console.log(index, index2)
+                                    } */}
+
+                                    <div className={`td ${isTheCheapest ? 'cheapest' : ''} ` + 
+                                            (this.state.currentBox.x == index2 ? 'selected ' : ' ') + 
+                                            (this.state.currentBox.y == index ? 'selected ' : ' ') +
+                                            (this.state.currentBox.x == index2 && this.state.currentBox.y == index ? 'active ' : ' ') + 
+                                            (this.isCurrentPage(index2) ? '' : '')
+                                        } onClick={
+                                        e => {this.setCurrentBox(index2, index)}
                                     }>{
                                             !isNaN(price) ?
                                                 <>
@@ -54,19 +118,24 @@ class Fztable extends Component {
             <div className="fztable">
                 <h1 id='title'>React Dynamic Table</h1>
                 <div className="table">
-                    <button className="btn btn-prev"></button>
-                    <button className="btn btn-next"></button>
+                    <button className="btn btn-prev" onClick = {this.btnPrev}></button>
+                    <button className="btn btn-next" onClick = {this.btnNext}></button>
                     <div className="thead">
-                        <div className="tr">
+                        <div className="column-header">
                             <div className="th title">
                                 <p>回程</p>
                                 <p>去程</p>
                             </div>
+                            {this.rowDate()}
+                        </div>
+                        <div className="tr">
                             {this.renderTableHeader()}
                         </div>
                     </div>
                     <div className="tbody">
-                        {this.renderTableRow()}
+                        <div className="mask-col-3">
+                            {this.renderTableRow()}
+                        </div>
                     </div>
                 </div>
             </div>

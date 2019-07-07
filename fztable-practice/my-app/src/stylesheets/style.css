@@ -1,0 +1,159 @@
+@charset "UTF-8";
+body {
+  color: #444444;
+  font-family: sans-serif, Arial, 微軟正黑體;
+}
+
+.fztable {
+  max-width: 960px;
+}
+
+.fztable .table {
+  display: table;
+  position: relative;
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #e1e2e4;
+}
+
+.fztable .table .tr {
+  display: table-row;
+}
+
+.fztable .table .th, .fztable .table .td {
+  display: table-cell;
+  position: relative;
+  width: calc((100% - 88px) / 7);
+  height: 50px;
+  border-right: 1px solid #e1e2e4;
+  border-bottom: 1px solid #e1e2e4;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #999999;
+  font-size: 0.875rem;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.fztable .table .th:last-of-type, .fztable .table .td:last-of-type {
+  border-right: 0;
+}
+
+.fztable .table .th.new-year:before {
+  content: attr(data-year);
+  display: block;
+  position: absolute;
+  top: 2px;
+  right: calc(50% - 32px);
+  color: #24a07c;
+  font-size: 0.75rem;
+}
+
+.fztable .table .td.cheapest::before {
+  content: "最便宜";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-width: 10px;
+  border-color: #ff8e26 transparent transparent #ff8e26;
+  border-style: solid;
+  color: #ff8e26;
+  font-size: 0.75rem;
+  text-indent: 10px;
+  line-height: 0;
+  white-space: nowrap;
+}
+
+.fztable .table .td.selected {
+  background-color: #f7f7f7;
+}
+
+.fztable .table .td.active, .fztable .table .td:hover {
+  background-color: #fff9e3;
+}
+
+.fztable .table .td.active:after, .fztable .table .td:hover:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #fe8b88;
+  background-color: transparent;
+}
+
+.fztable .table .td .price {
+  color: #444444;
+  margin-right: 3px;
+}
+
+.fztable .table .thead {
+  display: table-header-group;
+}
+
+.fztable .table .thead .th {
+  background-color: #eaedf2;
+  color: #666666;
+}
+
+.fztable .table .thead .th.title {
+  max-width: 88px;
+  padding: 4px;
+}
+
+.fztable .table .thead .th.title p {
+  margin: 0;
+  text-align: left;
+}
+
+.fztable .table .thead .th.title p:first-child {
+  text-align: right;
+}
+
+.fztable .table .tbody {
+  display: table-row-group;
+}
+
+.fztable .table .tbody .th {
+  width: 88px;
+  background-color: #f1f1f1;
+}
+
+.fztable .table .tbody .tr:last-of-type .th, .fztable .table .tbody .tr:last-of-type .td {
+  border-bottom: 0;
+}
+
+.fztable .btn {
+  position: absolute;
+  top: calc(50% - 20px);
+  z-index: 9;
+  width: 20px;
+  height: 40px;
+  border: 0;
+  cursor: pointer;
+}
+
+.fztable .btn:focus {
+  outline: 0;
+}
+
+.fztable .btn.btn-prev {
+  left: 88px;
+  background: rgba(171, 171, 171, 0.5) url(../imgs/arrow-prev.png) center center no-repeat;
+}
+
+.fztable .btn.btn-next {
+  right: 0;
+  background: rgba(171, 171, 171, 0.5) url(../imgs/arrow-next.png) center center no-repeat;
+}
+
+.fztable .btn.disabled {
+  display: none;
+}
+/*# sourceMappingURL=style.css.map */
