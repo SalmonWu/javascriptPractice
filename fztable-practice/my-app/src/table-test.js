@@ -16,17 +16,67 @@ class Fztable extends Component {
             y: -1
         },
         frameSize: 3,
-        tablePage: 1,
+        scrollPage: 3,
+        currentPage: 1,
+        position: 0,
+        speed: .3,
+        scrollStyle: {
+            transition: this.scrollTime + 's',
+            left: 0 + '%'
+        },
+        arrowNext: true
     }
 
     btnNext() {
         console.log('Next')
+        let moveRight = this.state.position - (100 / this.state.frameSize) * this.state.scrollPage
 
+        this.setState({
+            position: moveRight,
+            scrollStyle: {
+                transition: this.state.speed + 's',
+                left: moveRight + '%'
+            },
+            currentPage: this.state.currentPage + 1
+        })
+
+        if (!(this.state.scrollPage * this.state.currentPage <= this.state.tripData.length)) {
+            this.setState({
+                scrollStyle: {
+                    left: 133.33336 + '%'
+                }
+            })
+        }
+
+        console.log(this.state.scrollPage * this.state.currentPage <= this.state.tripData.length)
     }
 
     btnPrev() {
         console.log('Prev')
+        let moveLeft = this.state.position + (100 / this.state.frameSize) * this.state.scrollPage
 
+        this.setState({
+            position: moveLeft,
+            scrollStyle: {
+                transition: this.state.speed + 's',
+                left: moveLeft + '%'
+            },
+            currentPage: this.state.currentPage - 1
+        })
+
+        if (this.state.scrollPage * this.state.currentPage <= 0) {
+            if (this.state.frameSize == 3) {
+                this.setState({
+                    scrollStyle: {
+                        left: 0 + '%'
+                    }
+                })
+            }
+        } else {
+
+        }
+
+        console.log(this.state.currentPage)
     }
 
     setCurrentBox(x, y) {
@@ -44,7 +94,7 @@ class Fztable extends Component {
 
     renderTableHeader() {
         const { tripData } = this.state;
-        const createTd = tripData.map(({ date, date_year }, index) => {
+        const createHead = tripData.map(({ date, date_year }, index) => {
             return (
                 <div key={date}
                     className={[
@@ -55,7 +105,7 @@ class Fztable extends Component {
                     data-year={date_year}>{date}</div>
             )
         })
-        return createTd
+        return createHead
     }
 
     rowDate() {
@@ -73,7 +123,7 @@ class Fztable extends Component {
 
     renderTableRow() {
         const { tripData } = this.state;
-        const createTr = tripData.map(({ data }, index) => {
+        const createBody = tripData.map(({ data }, index) => {
             return (
                 <div className="tr" key={index}>
                     {
@@ -87,9 +137,10 @@ class Fztable extends Component {
                                         (this.state.currentBox.y == index ? ' selected' : '') +
                                         (this.state.currentBox.x == index2 && this.state.currentBox.y == index ? ' active ' : '')
                                         // (this.isCurrentPage(index2) ? '' : '')
-                                    } onClick={
-                                        e => { this.setCurrentBox(index2, index) }
-                                    }>{
+                                    } style={this.state.scrollStyle}
+                                        onClick={
+                                            e => { this.setCurrentBox(index2, index) }
+                                        }>{
                                             !isNaN(price) ?
                                                 <>
                                                     <span className="price">${price.toLocaleString()}</span>
@@ -104,7 +155,7 @@ class Fztable extends Component {
                 </div>
             )
         })
-        return createTr
+        return createBody
     }
 
     render() {
@@ -112,8 +163,8 @@ class Fztable extends Component {
             <div className="fztable">
                 <h1 id='title'>React Dynamic Table</h1>
                 <div className="table">
-                    <button className="btn btn-prev" onClick={this.btnPrev}></button>
-                    <button className="btn btn-next" onClick={this.btnNext}></button>
+                    <button className={`btn btn-prev ${this.state.arrowPrev}`} onClick={this.btnPrev}></button>
+                    <button className={`btn btn-next ${this.state.arrowNext ? '' : 'disabled'}`} onClick={this.btnNext}></button>
                     <div className="thead">
                         <div className="column-header">
                             <div className="th title">
@@ -125,7 +176,7 @@ class Fztable extends Component {
                     </div>
                     <div className="tbody">
                         <div className={`mask col-${this.state.frameSize}`}>
-                            <div className="tr">
+                            <div className="tr" style={this.state.scrollStyle}>
                                 {this.renderTableHeader()}
                             </div>
                             {this.renderTableRow()}

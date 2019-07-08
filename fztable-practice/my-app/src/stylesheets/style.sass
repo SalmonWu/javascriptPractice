@@ -132,7 +132,6 @@ body
         .tbody
             display: block
             .th, .td
-                max-width: calc((100% - 88px) / 7)
                 border-left: 1px solid $border
                 border-bottom: 1px solid $border
                 &:first-of-type 
@@ -140,6 +139,7 @@ body
             .th
                 background-color: $gray-blue
             .tr 
+                position: relative
                 &:last-of-type
                     .th, .td 
                         border-bottom: 0
@@ -148,10 +148,31 @@ body
                 overflow-x: scroll
                 overflow-y: hidden
                 margin-left: 88px
+                .th ,.td
+                        flex-basis: 100%
+                &.col-1
+                    .th ,.td
+                        min-width: calc(100% / 1)
+                &.col-2
+                    .th ,.td
+                        min-width: calc(100% / 2)
                 &.col-3
                     .th ,.td
-                        flex-basis: 100%
-                        min-width: calc(100% / 3)  
+                        min-width: calc(100% / 3)
+                &.col-4
+                    .th ,.td
+                        min-width: calc(100% / 4)  
+                &.col-5
+                    .th ,.td
+                        min-width: calc(100% / 5)  
+                &.col-6
+                    .th ,.td
+                        min-width: calc(100% / 6)  
+                @media screen and (min-width: 768px)
+                    min-width: calc(100% / 7)
+                    &.col-1, &.col-2, &.col-3, &.col-4, &.col-5, &.col-6
+                        .th, .td
+                            min-width: calc(100% / 7)
     .btn 
         position: absolute
         top: calc(50% - 20px)
