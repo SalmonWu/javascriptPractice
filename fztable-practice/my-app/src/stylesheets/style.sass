@@ -13,48 +13,36 @@ body
     color: $dark
     font-family: sans-serif, Arial, 微軟正黑體
 
+*::-webkit-scrollbar
+    display: none
+* 
+     -ms-overflow-style: none
+
 .fztable
     max-width: 960px
     margin: 0 auto
     .table 
         display: block
         position: relative
-        // border-collapse: collapse
+        overflow: hidden
         width: 100%
         border: 1px solid $border
-        .mask-col-3
-            position: relative
-            left: 88px
-            overflow: hidden
-            width: 100%
         .tr 
             display: flex
-            flex-wrap: wrap
-            flex: 1 1 auto
-            overflow: hidden
-            width: 100%
         .th, .td 
             display: flex
             justify-content: center
             align-items: center
             position: relative
             flex: 1 1 auto
-            max-width: calc((100% - 88px) / 7)
             height: 50px
-            border-right: 1px solid $border
-            border-bottom: 1px solid $border
             box-sizing: border-box
             color: $gray
             font-size: 0.875rem
             vertical-align: middle
             text-align: center
-            &:last-of-type
-                border-right: 0 
-        .opacity-0
-            display: none
-            visibility: hidden
-            opacity: 0
-        .col-date 
+        .th
+            color: $gray-dark
             &.new-year
                 &:before
                     content: attr(data-year)
@@ -64,6 +52,7 @@ body
                     right: calc(50% - 32px)
                     color: $green
                     font-size: 0.75rem
+                    line-height: normal
         .td
             &.cheapest
                 &::before 
@@ -90,9 +79,10 @@ body
                     content: ""
                     display: block
                     position: absolute
-                    top: -1px
-                    left: -1px
+                    top: 0
+                    left: 0
                     z-index: 10
+                    box-sizing: border-box
                     width: 100%
                     height: 100% 
                     border: 1px solid $pink
@@ -108,16 +98,24 @@ body
                 position: absolute
                 top: 0
                 left: 0
+                z-index: 10
                 width: 88px
                 div 
                     height: 50px
                     text-align: center
                     line-height: 50px
+            .tr 
+                overflow: hidden
             .th
                 position: relative
                 left: 88px
-                background-color: $gray-blue
-                color: $gray-dark
+                border-right: 1px solid $border
+                border-bottom: 1px solid $border
+                background-color: #f1f1f1
+                &:last-of-type 
+                    border-bottom: 0
+                &.title
+                    background-color: $gray-blue
                 &.title, &.col-date
                     display: block
                     position: relative
@@ -133,20 +131,34 @@ body
                             text-align: right
         .tbody
             display: block
-            .th 
-                table-layout: fixed
-                max-width: 88px
-                background-color: #f1f1f1
+            .th, .td
+                max-width: calc((100% - 88px) / 7)
+                border-left: 1px solid $border
+                border-bottom: 1px solid $border
+                &:first-of-type 
+                    border-left: 0
+            .th
+                background-color: $gray-blue
             .tr 
                 &:last-of-type
                     .th, .td 
                         border-bottom: 0
+            .mask
+                position: relative
+                overflow-x: scroll
+                overflow-y: hidden
+                margin-left: 88px
+                &.col-3
+                    .th ,.td
+                        flex-basis: 100%
+                        min-width: calc(100% / 3)  
     .btn 
         position: absolute
         top: calc(50% - 20px)
-        z-index: 9
+        z-index: 11
         width: 20px
         height: 40px
+        padding: 0
         border: 0
         cursor: pointer
         &:focus 
