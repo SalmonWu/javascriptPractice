@@ -171,6 +171,9 @@ body
                 @media screen and (min-width: 768px)
                     min-width: calc(100% / 7)
                     &.col-1, &.col-2, &.col-3, &.col-4, &.col-5, &.col-6
+                        .tr 
+                            left: 0 !important
+                            transition: none !important
                         .th, .td
                             min-width: calc(100% / 7)
     .btn 
@@ -192,3 +195,7 @@ body
             background: rgba(171, 171, 171, .5) url(../imgs/arrow-next.png) center center no-repeat
         &.disabled
             display: none
+        @media screen and (min-width: 768px)
+            &.btn-prev,
+            &.btn-next
+                display: none
