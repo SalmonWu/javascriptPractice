@@ -1,0 +1,201 @@
+$dark: #444444
+$gray-dark: #666666
+$gray: #999999
+$gray-light: #f7f7f7
+$gray-blue: #eaedf2
+$green: #24a07c
+$pink: #fe8b88
+$yellow: #fff9e3
+$cheapest: #ff8e26
+$border: #e1e2e4
+    
+body 
+    color: $dark
+    font-family: sans-serif, Arial, 微軟正黑體
+
+*::-webkit-scrollbar
+    display: none
+* 
+     -ms-overflow-style: none
+
+.fztable
+    max-width: 960px
+    margin: 0 auto
+    .table 
+        display: block
+        position: relative
+        overflow: hidden
+        width: 100%
+        border: 1px solid $border
+        .tr 
+            display: flex
+        .th, .td 
+            display: flex
+            justify-content: center
+            align-items: center
+            position: relative
+            flex: 1 1 auto
+            height: 50px
+            box-sizing: border-box
+            color: $gray
+            font-size: 0.875rem
+            vertical-align: middle
+            text-align: center
+        .th
+            color: $gray-dark
+            &.new-year
+                &:before
+                    content: attr(data-year)
+                    display: block
+                    position: absolute
+                    top: 2px
+                    right: calc(50% - 32px)
+                    color: $green
+                    font-size: 0.75rem
+                    line-height: normal
+        .td
+            &.cheapest
+                &::before 
+                    content: "最便宜"
+                    display: block
+                    position: absolute
+                    top: 0
+                    left: 0
+                    width: 0
+                    height: 0
+                    border-width: 10px 
+                    border-color: $cheapest transparent transparent $cheapest
+                    border-style: solid 
+                    color: $cheapest
+                    font-size: 0.75rem
+                    text-indent: 10px 
+                    line-height: 0
+                    white-space: nowrap
+            &.selected
+                background-color: $gray-light
+            &.active, &:hover 
+                background-color: $yellow
+                &:after 
+                    content: ""
+                    display: block
+                    position: absolute
+                    top: 0
+                    left: 0
+                    z-index: 10
+                    box-sizing: border-box
+                    width: 100%
+                    height: 100% 
+                    border: 1px solid $pink
+                    background-color: transparent
+            .price
+                color: $dark
+                margin-right: 3px
+        .thead 
+            display: block
+            .column-header
+                display: flex
+                flex-direction: column
+                position: absolute
+                top: 0
+                left: 0
+                z-index: 10
+                width: 88px
+                div 
+                    height: 50px
+                    text-align: center
+                    line-height: 50px
+            .tr 
+                overflow: hidden
+            .th
+                position: relative
+                left: 88px
+                border-right: 1px solid $border
+                border-bottom: 1px solid $border
+                background-color: #f1f1f1
+                &:last-of-type 
+                    border-bottom: 0
+                &.title
+                    background-color: $gray-blue
+                &.title, &.col-date
+                    display: block
+                    position: relative
+                    top: 0
+                    left: 0
+                    max-width: 88px
+                    padding: 4px
+                    p 
+                        margin: 0
+                        text-align: left
+                        line-height: normal
+                        &:first-child 
+                            text-align: right
+        .tbody
+            display: block
+            .th, .td
+                border-left: 1px solid $border
+                border-bottom: 1px solid $border
+                &:first-of-type 
+                    border-left: 0
+            .th
+                background-color: $gray-blue
+            .tr 
+                position: relative
+                &:last-of-type
+                    .th, .td 
+                        border-bottom: 0
+            .mask
+                position: relative
+                overflow-x: scroll
+                overflow-y: hidden
+                margin-left: 88px
+                .th ,.td
+                        flex-basis: 100%
+                &.col-1
+                    .th ,.td
+                        min-width: calc(100% / 1)
+                &.col-2
+                    .th ,.td
+                        min-width: calc(100% / 2)
+                &.col-3
+                    .th ,.td
+                        min-width: calc(100% / 3)
+                &.col-4
+                    .th ,.td
+                        min-width: calc(100% / 4)  
+                &.col-5
+                    .th ,.td
+                        min-width: calc(100% / 5)  
+                &.col-6
+                    .th ,.td
+                        min-width: calc(100% / 6)  
+                @media screen and (min-width: 768px)
+                    min-width: calc(100% / 7)
+                    &.col-1, &.col-2, &.col-3, &.col-4, &.col-5, &.col-6
+                        .tr 
+                            left: 0 !important
+                            transition: none !important
+                        .th, .td
+                            min-width: calc(100% / 7)
+    .btn 
+        position: absolute
+        top: calc(50% - 20px)
+        z-index: 11
+        width: 20px
+        height: 40px
+        padding: 0
+        border: 0
+        cursor: pointer
+        &:focus 
+            outline: 0
+        &.btn-prev
+            left: 88px
+            background: rgba(171, 171, 171, .5) url(../imgs/arrow-prev.png) center center no-repeat
+        &.btn-next
+            right: 0
+            background: rgba(171, 171, 171, .5) url(../imgs/arrow-next.png) center center no-repeat
+        &.disabled
+            display: none
+        @media screen and (min-width: 768px)
+            &.btn-prev,
+            &.btn-next
+                display: none

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import './stylesheets/style.sass';
-import Fztable from "./fztable";
+import Calendar from "./calendar";
 
 const setting = {
     // M版時一個畫面show幾格儲存格
@@ -16,4 +16,4 @@ const setting = {
     }
 };
 
-ReactDOM.render(<Fztable {...setting} />, document.getElementById("root"));
+ReactDOM.render(<Calendar {...setting} />, document.getElementById("root"));
