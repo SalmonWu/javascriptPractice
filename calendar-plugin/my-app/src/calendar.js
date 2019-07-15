@@ -1,113 +1,43 @@
 import React, { Component } from "react";
-import TripData from "./data/data1.json";
 import moment from "moment";
-
-class Week extends React.Component {
-    render() {
-        let days = [];
-        let {
-            date,
-        } = this.props;
-
-        const {
-            month,
-            selected,
-            select,
-        } = this.props;
-
-        for (var i = 0; i < 7; i++) {
-            let day = {
-                name: date.format("dd").substring(0, 1),
-                number: date.date(),
-                isCurrentMonth: date.month() === month.month(),
-                isToday: date.isSame(new Date(), "day"),
-                date: date
-            };
-            days.push(
-                <Day day={day}
-                    selected={selected}
-                    select={select} />
-            );
-
-            date = date.clone();
-            date.add(1, "day");
-        }
-
-        return (
-            <div className="row week" key={days[0]}>
-                {days}
-            </div>
-        );
-    }
-
-}
-
-class Day extends React.Component {
-    render() {
-        const {
-            day,
-            day: {
-                date,
-                isCurrentMonth,
-                isToday,
-                number
-            },
-            select,
-            selected
-        } = this.props;
-
-        return (
-            <span
-                key={date.toString()}
-                className={"day" + (isToday ? " today" : "") + (isCurrentMonth ? "" : " different-month") + (date.isSame(selected) ? " selected" : "")}
-                onClick={() => select(day)}>{number}</span>
-        );
-    }
-}
+import _ from 'lodash'
 
 class Calendar extends Component {
     constructor(props) {
         super(props)
 
         this.calendarDisplay = this.calendarDisplay.bind(this)
+        this.changeMonth = this.changeMonth.bind(this)
+        this.prevMonth = this.prevMonth.bind(this)
+        this.nextMonth = this.nextMonth.bind(this)
+
+        console.log(this.props.tripData)
     }
 
     state = {
-        'tripData': TripData,
-        month: moment(),
-        calendarDisplay: true
+        raw: [],
+        parsed: {},
+        range: {
+            min: null,
+            max: null
+        },
+        calendarDisplay: true,
+        currentYearMonth: '2018-07'
     }
 
-    renderWeeks() {
-        let weeks = [];
-        let done = false;
-        let date = this.state.month.clone().startOf("month").add("w" - 1).day("Sunday");
-        let count = 0;
-        let monthIndex = date.month();
-
-        const {
-            selected,
-            month,
-        } = this.state;
-
-        while (!done) {
-            weeks.push(
-                <Week key={date}
-                    date={date.clone()}
-                    month={month}
-                    select={(day) => this.select(day)}
-                    selected={selected} />
-            );
-
-            date.add(1, "w");
-
-            done = count++ > 2 && monthIndex !== date.month();
-            monthIndex = date.month();
-        }
-
-        return weeks;
-    };
-
+    componentWillMount() {
+        this.setState({
+            raw: this.props.tripData,
+            parsed: this.splitData(this.props.tripData),
+            range: {
+                min: this.parseMinDate(this.props.tripData),
+                max: this.parseMaxDate(this.props.tripData),
+            },
+            dataKeySetting: this.props.dataKeySetting
+        }, () => {
+            console.log(this.state.parsed)
+        })
+    }
 
     calendarDisplay() {
         if (this.state.calendarDisplay) {
@@ -121,7 +51,123 @@ class Calendar extends Component {
         }
     }
 
+    changeMonth(yearMonth) {
+        this.setState({
+            currentYearMonth: yearMonth
+        })
+    }
+
+    prevMonth() {
+        if (this
+            .getDateMoment()
+            .subtract(2 ,'month')
+            .isBetween(this.state.range.min, this.state.range.max)) {
+            
+                this.setState({
+                    currentYearMonth: this.getDateMoment().subtract(2, 'month').format('YYYY-MM')
+                })
+        }
+
+    }
+
+    nextMonth() {
+        if (this
+            .getDateMoment().add(2, 'month')
+            .isBetween(this.state.range.min, this.state.range.max)) {
+            
+                this.setState({
+                    currentYearMonth: this.getDateMoment().add(2, 'month').format('YYYY-MM')
+                })
+        }
+    }
+
+    currentDayCount() {
+        return moment(this.state.currentYearMonth, 'YYYY-MM').daysInMonth()
+    }
+
+    currentDays() {
+        return this.generate1toNArray(this.currentDayCount())
+    }
+
+    getDateMoment(date) {
+        return moment(this.state.currentYearMonth + '-' + date, 'YYYY-MM-DD')
+    }
+
+    generate1toNArray(n) {
+        return [...Array(n).keys()]
+    }
+
+    prevMonthMoment() {
+        return this.getDateMoment().subtract(1, 'month')
+    }
+
+    nextMonthMoment() {
+        return this.getDateMoment().add(1, 'month')
+    }
+
+    splitData(raw) {
+        let pool = {}
+        let min, max
+
+        _.map(raw, (value, key) => {
+            let date = moment(value.date, 'YYYY/MM/DD').format('YYYY-MM-DD')
+            
+            pool[date] = pool[date] ? pool[date] : value
+
+            min = moment(min || value.date, 'YYYY/MM/DD').isAfter(value.date) ? value.date : min
+        })
+
+        return pool
+    }
+
+    parseMinDate(raw) {
+        let min = moment()
+
+        _.map(raw, (value, key) => {
+            min = moment(value.date, 'YYYY/MM/DD').isBefore(min) ? moment(value.date, 'YYYY/MM/DD') : moment(min)
+        })
+
+        return min
+    }
+
+    parseMaxDate(raw) {
+        let max = moment('1970-01-01')
+
+        _.map(raw, (value, key) => {
+            max = moment(value.date, 'YYYY/MM/DD').isAfter(max) ? moment(value.date, 'YYYY/MM/DD') : moment(max)
+        })
+
+        return max
+    }
+
+    getDataFromDate(date) {
+        let m = this.getDateMoment(date)
+
+        return _.get(this.state.parsed, m.format('YYYY-MM-DD')) || {}
+    }
+
+    getDateStatus(date) {
+        return this.getDataFromDate(date + 1)[this.state.dataKeySetting.status]
+    }
+
+    getDateAvailable(date) {
+        return this.getDataFromDate(date + 1)[this.state.dataKeySetting.available]
+    }
+
+    getDateTotal(date) {
+        return this.getDataFromDate(date + 1)[this.state.dataKeySetting.total]
+    }
+
+    getDatePrice(date) {
+        return this.getDataFromDate(date + 1)[this.state.dataKeySetting.price]
+    }
+
+    isDateEmpty(date) {
+        return !!this.getDataFromDate(date + 1)[this.state.dataKeySetting.status]
+    }
+
     render() {
+
         return (
             <div className={`calendar${this.state.calendarDisplay ? '' : ' display-list'}`}>
                 <div className="cly-header">
@@ -134,19 +180,35 @@ class Calendar extends Component {
                     </button>
                 </div>
                 <div className="nv">
-                    <button type="button" className="bt bt-prev"></button>
-                    <button type="button" className="bt bt-next"></button>
+                    <button type="button" className="bt bt-prev" onClick={() => {
+                        this.prevMonth()
+                    }}></button>
                     <ul className="nvb months">
                         <li className="nvt">
-                            <a href={'http://localhost:3000/'} className="nvt-link">2019 10月</a>
+                            <a className={`nvt-link 
+                            ${this.getDateMoment().isSame(this.prevMonthMoment()) ? 'active' : ''}`} 
+                            onClick={() => {
+                                this.changeMonth(this.prevMonthMoment().format('YYYY-MM'))
+                            }
+                            }>{this.prevMonthMoment().format('YYYY MM月')}</a>
                         </li>
                         <li className="nvt">
-                            <a href={'http://localhost:3000/'} className="nvt-link active">2019 11月</a>
+                            <a className={
+                                `nvt-link ${this.getDateMoment().isSame(this.getDateMoment()) ? 'active' : ''}`
+                            }>{this.getDateMoment().format('YYYY MM月')}</a>
                         </li>
                         <li className="nvt">
-                            <a href={'http://localhost:3000/'} className="nvt-link">2019 12月</a>
+                            <a className={
+                                `nvt-link ${this.getDateMoment().isSame(this.nextMonthMoment()) ? 'active' : ''}`
+                            } onClick={() => {
+                                this.changeMonth(this.nextMonthMoment().format('YYYY-MM'))
+                            }
+                            }>{this.nextMonthMoment().format('YYYY MM月')}</a>
                         </li>
                     </ul>
+                    <button type="button" className="bt bt-next" onClick={() => {
+                        this.nextMonth()
+                    }}></button>
                 </div>
                 <div className="cy-table">
                     <div className="cy-head weeks">
@@ -161,76 +223,44 @@ class Calendar extends Component {
                         </ul>
                     </div>
                     <div className="cy-body">
-                        {this.renderWeeks()}
-                        {/* <div className="row week" key={days[0]}>
-                            {days}
-                        </div> */}
+                        {/* {this.renderWeeks()} */}
+
                         <ul>
+                            {this.generate1toNArray(this.getDateMoment(1).day()).map(() => {
+                                return (<li className="disabled" key={Math.random()}></li>)
+                            })}
 
-                            {/* <li className="disabled"></li>
-                            <li className="has-data">
-                                <ol>
-                                    <li className="days">
-                                        1
-                                        <span className="weekday">星期二</span>
-                                    </li>
-                                    <li className="guaranteed success"></li>
-                                    <li className="status sign-up">報名</li>
-                                    <li className="vacancy">可賣:80</li>
-                                    <li className="total">團位:60</li>
-                                    <li className="price">69888</li>
-                                </ol>
-                            </li>
-                            <li>
-                                <span className="days">2</span>
-                            </li>
-                            <li className="has-data">
-                                <ol>
-                                    <li className="days">
-                                        3
-                                        <span className="weekday">星期四</span>
-                                    </li>
-                                    <li className="guaranteed"></li>
-                                    <li className="status sign-up">報名</li>
-                                    <li className="vacancy">可賣:80</li>
-                                    <li className="total">團位:60</li>
-                                    <li className="price price-up">69888</li>
-                                </ol>
-                            </li>
-                            <li>
-                                <ol>
-                                    <li className="days">4</li>
+                            {this.currentDays().map((date) => {
+                                return (
+                                    <li className={this.isDateEmpty(date + 1) ? 'has-data' : ''} key={date}>
+                                        <ol>
+                                            <li className="days">
+                                                {this.getDateMoment(date + 1).format('D')}
 
-                                </ol>
-                            </li>
-                            <li className="has-data holiday">
-                                <ol>
-                                    <li className="days">
-                                        5
-                                        <span className="weekday">星期六</span>
+                                                <span className="weekday">
+                                                    {this.getDateMoment(date + 1).format('dddd')}
+                                                </span>
+                                            </li>
+                                            
+                                            {this.isDateEmpty(date + 1) ? (
+                                                <li>
+                                                    <ul>
+                                                        <li className="guaranteed success"></li>
+                                                        <li className="status sign-up">{this.getDateStatus(date + 1)}</li>
+                                                        <li className="vacancy">可賣:{this.getDateTotal(date + 1)}</li>
+                                                        <li className="total">團位:{this.getDateAvailable(date + 1)}</li>
+                                                        <li className="price">{
+                                                            this.getDataFromDate(date + 1).price
+                                                        }</li>
+                                                    </ul>
+                                                </li>
+                                            ) : ''}
+
+                                        </ol>
                                     </li>
-                                    <li className="guaranteed"></li>
-                                    <li className="status sign-up">報名</li>
-                                    <li className="vacancy">可賣:80</li>
-                                    <li className="total">團位:60</li>
-                                    <li className="price price-up">69888</li>
-                                </ol>
-                            </li>
-                            <li>
-                                <ol>
-                                    <li className="days">6</li>
-                                </ol>
-                            </li>
-                            <li>
-                                <ol>
-                                    <li className="days">7</li>
-                                </ol>
-                            </li>
-                            <li>
-                                <ol>
-                                    <li className="days">8</li>
-                                </ol>
-                            </li> */}
+                                )
+                            })}
+                            
                         </ul>
                     </div>
                 </div>

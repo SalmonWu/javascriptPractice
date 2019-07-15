@@ -154,7 +154,7 @@ body
                     line-height: 30px
                     text-align: center 
         .cy-body 
-            ul
+            > ul
                 > li
                     position: relative
                     width: calc(100% / 7)
@@ -192,6 +192,13 @@ body
                                 height: 100%
                                 border: 2px solid #66bb3c
                                 background-color: transparent
+            ol 
+                list-style-type: none
+                padding: 0
+                margin: 0
+                li 
+                    float: unset
+                    > ul  
                         .guaranteed 
                             &.success
                                 position: absolute
@@ -220,12 +227,6 @@ body
                                 &::after 
                                     content: ' 起'
                                     color: $dark
-            ol 
-                list-style-type: none
-                padding: 0
-                margin: 0
-                li 
-                    float: unset
     &.display-list 
         .nvb 
             border: 1px solid $grey
