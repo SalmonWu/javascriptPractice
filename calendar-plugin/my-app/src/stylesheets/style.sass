@@ -166,7 +166,7 @@ body
                     font-size: 0.75rem
                     &:nth-child(7n)
                         border-right: 0
-                    &.active, &:hover 
+                    &:hover 
                         background-color: $yellow
                     &.disabled 
                         background-color: $grey-medium
@@ -235,7 +235,7 @@ body
             .cy-head 
                 display: none
             .cy-body 
-                ul 
+                > ul 
                     > li 
                         display: none
                         float: unset
@@ -249,6 +249,22 @@ body
                             border-color: transparent $grey $grey
                             &.active, &:hover 
                                 border: 1px solid #66bb3c
+                        .days 
+                            position: inherit
+                            float: left
+                            height: 60px
+                            padding: 5px 16px 0 8px
+                            font-size: 1.5rem
+                            text-align: center
+                            .weekday 
+                                display: block
+                                font-size: 1rem
+                        &.holiday
+                            .days
+                                color: $blood
+                ol 
+                    li 
+                        > ul 
                             .guaranteed
                                 &.success 
                                     top: auto
@@ -269,21 +285,4 @@ body
                                 position: absolute 
                                 right: 8px
                                 bottom: 8px
-                                font-size: 1rem
-                        .days 
-                            position: inherit
-                            float: left
-                            height: 60px
-                            padding: 5px 16px 0 8px
-                            font-size: 1.5rem
-                            text-align: center
-                            .weekday 
-                                display: block
-                                font-size: 1rem
-                        &.holiday
-                            .days
-                                color: $blood
-                            
-
-
-                        
+                                font-size: 1rem                       

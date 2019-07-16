@@ -6,9 +6,9 @@ import Calendar from "./calendar";
 
 import data1 from './data/data1.json'
 
-ReactDOM.render(<Calendar 
-    dataKeySetting= {{
-		// 保證出團
+window.calendar = ReactDOM.render(<Calendar
+    dataKeySetting={{
+        // 保證出團
         'guaranteed': 'guaranteed',
         // 狀態
         'status': 'status',
@@ -19,4 +19,4 @@ ReactDOM.render(<Calendar
         // 價格
         'price': 'price'
     }}
-    tripData={data1}/>, document.getElementById("root"));
+    tripData={data1} />, document.getElementById("root"));

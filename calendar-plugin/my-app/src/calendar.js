@@ -1,17 +1,20 @@
 import React, { Component } from "react";
 import moment from "moment";
-import _ from 'lodash'
+import momentLocale from "moment/locale/zh-tw";
+import _ from 'lodash';
 
 class Calendar extends Component {
     constructor(props) {
         super(props)
 
-        this.calendarDisplay = this.calendarDisplay.bind(this)
+        moment.updateLocale('zh-tw', momentLocale);
+
+        this.switch = this.switch.bind(this)
         this.changeMonth = this.changeMonth.bind(this)
         this.prevMonth = this.prevMonth.bind(this)
         this.nextMonth = this.nextMonth.bind(this)
 
-        console.log(this.props.tripData)
+        // console.log(this.props.tripData)
     }
 
     state = {
@@ -21,8 +24,11 @@ class Calendar extends Component {
             min: null,
             max: null
         },
+        dateSelect: null,
+        consoleSelectDate: () => {
+        },
         calendarDisplay: true,
-        currentYearMonth: '2018-07'
+        initYearMonth: '2018-07'
     }
 
     componentWillMount() {
@@ -35,11 +41,11 @@ class Calendar extends Component {
             },
             dataKeySetting: this.props.dataKeySetting
         }, () => {
-            console.log(this.state.parsed)
+            // console.log(this.state.parsed)
         })
     }
 
-    calendarDisplay() {
+    switch() {
         if (this.state.calendarDisplay) {
             this.setState({
                 calendarDisplay: false
@@ -53,36 +59,44 @@ class Calendar extends Component {
 
     changeMonth(yearMonth) {
         this.setState({
-            currentYearMonth: yearMonth
+            initYearMonth: yearMonth
         })
     }
 
     prevMonth() {
         if (this
             .getDateMoment()
-            .subtract(2 ,'month')
+            .subtract(1, 'month')
             .isBetween(this.state.range.min, this.state.range.max)) {
-            
-                this.setState({
-                    currentYearMonth: this.getDateMoment().subtract(2, 'month').format('YYYY-MM')
-                })
-        }
 
+            this.setState({
+                initYearMonth: this.getDateMoment().subtract(1, 'month').format('YYYY-MM')
+            })
+        }
     }
 
     nextMonth() {
         if (this
-            .getDateMoment().add(2, 'month')
+            .getDateMoment().add(1, 'month')
             .isBetween(this.state.range.min, this.state.range.max)) {
-            
-                this.setState({
-                    currentYearMonth: this.getDateMoment().add(2, 'month').format('YYYY-MM')
-                })
+            this.setState({
+                initYearMonth: this.getDateMoment().add(1, 'month').format('YYYY-MM')
+            })
         }
+        return this.getDateMoment().format('YYYY-MM')
+    }
+
+    handleDateClick(date) {
+        this.setState({
+            dateSelect: this.getDateMoment(date + 1)
+        },
+            () => {
+                console.log(this.state.dateSelect)
+            })
     }
 
     currentDayCount() {
-        return moment(this.state.currentYearMonth, 'YYYY-MM').daysInMonth()
+        return moment(this.state.initYearMonth, 'YYYY-MM').daysInMonth()
     }
 
     currentDays() {
@@ -90,7 +104,7 @@ class Calendar extends Component {
     }
 
     getDateMoment(date) {
-        return moment(this.state.currentYearMonth + '-' + date, 'YYYY-MM-DD')
+        return moment(this.state.initYearMonth + '-' + date, 'YYYY-MM-DD')
     }
 
     generate1toNArray(n) {
@@ -107,11 +121,11 @@ class Calendar extends Component {
 
     splitData(raw) {
         let pool = {}
-        let min, max
+        let min
 
         _.map(raw, (value, key) => {
             let date = moment(value.date, 'YYYY/MM/DD').format('YYYY-MM-DD')
-            
+
             pool[date] = pool[date] ? pool[date] : value
 
             min = moment(min || value.date, 'YYYY/MM/DD').isAfter(value.date) ? value.date : min
@@ -167,14 +181,13 @@ class Calendar extends Component {
     }
 
     render() {
-
         return (
             <div className={`calendar${this.state.calendarDisplay ? '' : ' display-list'}`}>
                 <div className="cly-header">
                     <ul>
                         <li><a href={'http://localhost:3000/'}>行程1</a></li>
                     </ul>
-                    <button type="button" className="ic-ln" onClick={this.calendarDisplay}>
+                    <button type="button" className="ic-ln" onClick={this.switch}>
                         <i className="fa fa-list-ul" aria-hidden="true"></i>
                         切換列表顯示
                     </button>
@@ -185,20 +198,20 @@ class Calendar extends Component {
                     }}></button>
                     <ul className="nvb months">
                         <li className="nvt">
-                            <a className={`nvt-link 
-                            ${this.getDateMoment().isSame(this.prevMonthMoment()) ? 'active' : ''}`} 
-                            onClick={() => {
-                                this.changeMonth(this.prevMonthMoment().format('YYYY-MM'))
-                            }
-                            }>{this.prevMonthMoment().format('YYYY MM月')}</a>
+                            <a href={"https://localhost:3000"} className={`nvt-link 
+                            ${this.getDateMoment().isSame(this.prevMonthMoment()) ? 'active' : ''}`}
+                                onClick={() => {
+                                    this.changeMonth(this.prevMonthMoment().format('YYYY-MM'))
+                                }
+                                }>{this.prevMonthMoment().format('YYYY MM月')}</a>
                         </li>
                         <li className="nvt">
-                            <a className={
+                            <a href={"https://localhost:3000"} className={
                                 `nvt-link ${this.getDateMoment().isSame(this.getDateMoment()) ? 'active' : ''}`
                             }>{this.getDateMoment().format('YYYY MM月')}</a>
                         </li>
                         <li className="nvt">
-                            <a className={
+                            <a href={"https://localhost:3000"} className={
                                 `nvt-link ${this.getDateMoment().isSame(this.nextMonthMoment()) ? 'active' : ''}`
                             } onClick={() => {
                                 this.changeMonth(this.nextMonthMoment().format('YYYY-MM'))
@@ -223,8 +236,6 @@ class Calendar extends Component {
                         </ul>
                     </div>
                     <div className="cy-body">
-                        {/* {this.renderWeeks()} */}
-
                         <ul>
                             {this.generate1toNArray(this.getDateMoment(1).day()).map(() => {
                                 return (<li className="disabled" key={Math.random()}></li>)
@@ -232,7 +243,17 @@ class Calendar extends Component {
 
                             {this.currentDays().map((date) => {
                                 return (
-                                    <li className={this.isDateEmpty(date + 1) ? 'has-data' : ''} key={date}>
+                                    <li className={
+                                        (this.isDateEmpty(date) ? 'has-data' : '') +
+                                        (this.getDateMoment(date + 1).isSame(this.state.dateSelect) ? ' active' : '')
+                                    }
+                                        key={date}
+                                        onClick={() => {
+                                            this.handleDateClick(date)
+                                            console.log(this.getDateMoment(date + 1).isSame(this.state.dateSelect))
+                                        }
+                                        }
+                                    >
                                         <ol>
                                             <li className="days">
                                                 {this.getDateMoment(date + 1).format('D')}
@@ -241,16 +262,16 @@ class Calendar extends Component {
                                                     {this.getDateMoment(date + 1).format('dddd')}
                                                 </span>
                                             </li>
-                                            
-                                            {this.isDateEmpty(date + 1) ? (
+
+                                            {this.isDateEmpty(date) ? (
                                                 <li>
                                                     <ul>
                                                         <li className="guaranteed success"></li>
-                                                        <li className="status sign-up">{this.getDateStatus(date + 1)}</li>
-                                                        <li className="vacancy">可賣:{this.getDateTotal(date + 1)}</li>
-                                                        <li className="total">團位:{this.getDateAvailable(date + 1)}</li>
+                                                        <li className="status sign-up">{this.getDateStatus(date)}</li>
+                                                        <li className="vacancy">可賣:{this.getDateAvailable(date)}</li>
+                                                        <li className="total">團位:{this.getDateTotal(date)}</li>
                                                         <li className="price">{
-                                                            this.getDataFromDate(date + 1).price
+                                                            this.getDatePrice(date) ? '$' + this.getDatePrice(date) : ""
                                                         }</li>
                                                     </ul>
                                                 </li>
@@ -260,7 +281,7 @@ class Calendar extends Component {
                                     </li>
                                 )
                             })}
-                            
+
                         </ul>
                     </div>
                 </div>
