@@ -18,6 +18,7 @@ class Calendar extends Component {
     }
 
     state = {
+        'tripData': this.props.tripData,
         raw: [],
         parsed: {},
         range: {
@@ -42,6 +43,19 @@ class Calendar extends Component {
             dataKeySetting: this.props.dataKeySetting
         }, () => {
             // console.log(this.state.parsed)
+        })
+    }
+
+    inputData() {
+        this.setState({
+            tripData: ({
+                "guaranteed": false,
+                "date": "2018/07/02",
+                "price": 76263,
+                "availableVancancy": 16,
+                "totalVacnacy": 166,
+                "status": "預定"
+            })
         })
     }
 
@@ -91,7 +105,7 @@ class Calendar extends Component {
             dateSelect: this.getDateMoment(date + 1)
         },
             () => {
-                console.log(this.state.dateSelect)
+                // console.log(this.state.dateSelect)
             })
     }
 
@@ -198,25 +212,25 @@ class Calendar extends Component {
                     }}></button>
                     <ul className="nvb months">
                         <li className="nvt">
-                            <a href={"https://localhost:3000"} className={`nvt-link 
+                            <span className={`nvt-link 
                             ${this.getDateMoment().isSame(this.prevMonthMoment()) ? 'active' : ''}`}
                                 onClick={() => {
                                     this.changeMonth(this.prevMonthMoment().format('YYYY-MM'))
                                 }
-                                }>{this.prevMonthMoment().format('YYYY MM月')}</a>
+                                }>{this.prevMonthMoment().format('YYYY MM月')}</span>
                         </li>
                         <li className="nvt">
-                            <a href={"https://localhost:3000"} className={
+                            <span className={
                                 `nvt-link ${this.getDateMoment().isSame(this.getDateMoment()) ? 'active' : ''}`
-                            }>{this.getDateMoment().format('YYYY MM月')}</a>
+                            }>{this.getDateMoment().format('YYYY MM月')}</span>
                         </li>
                         <li className="nvt">
-                            <a href={"https://localhost:3000"} className={
+                            <span className={
                                 `nvt-link ${this.getDateMoment().isSame(this.nextMonthMoment()) ? 'active' : ''}`
                             } onClick={() => {
                                 this.changeMonth(this.nextMonthMoment().format('YYYY-MM'))
                             }
-                            }>{this.nextMonthMoment().format('YYYY MM月')}</a>
+                            }>{this.nextMonthMoment().format('YYYY MM月')}</span>
                         </li>
                     </ul>
                     <button type="button" className="bt bt-next" onClick={() => {
@@ -250,7 +264,7 @@ class Calendar extends Component {
                                         key={date}
                                         onClick={() => {
                                             this.handleDateClick(date)
-                                            console.log(this.getDateMoment(date + 1).isSame(this.state.dateSelect))
+                                            this.inputData()
                                         }
                                         }
                                     >
@@ -276,12 +290,10 @@ class Calendar extends Component {
                                                     </ul>
                                                 </li>
                                             ) : ''}
-
                                         </ol>
                                     </li>
                                 )
                             })}
-
                         </ul>
                     </div>
                 </div>
