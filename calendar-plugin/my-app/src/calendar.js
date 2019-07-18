@@ -13,8 +13,6 @@ class Calendar extends Component {
         this.changeMonth = this.changeMonth.bind(this)
         this.prevMonth = this.prevMonth.bind(this)
         this.nextMonth = this.nextMonth.bind(this)
-
-        // console.log(this.props.tripData)
     }
 
     state = {
@@ -26,8 +24,8 @@ class Calendar extends Component {
             max: null
         },
         dateSelect: null,
-        consoleSelectDate: () => {
-        },
+        // consoleSelectDate: () => {
+        // },
         calendarDisplay: true,
         initYearMonth: '2018-07'
     }
@@ -43,19 +41,6 @@ class Calendar extends Component {
             dataKeySetting: this.props.dataKeySetting
         }, () => {
             // console.log(this.state.parsed)
-        })
-    }
-
-    inputData() {
-        this.setState({
-            tripData: ({
-                "guaranteed": false,
-                "date": "2018/07/02",
-                "price": 76263,
-                "availableVancancy": 16,
-                "totalVacnacy": 166,
-                "status": "預定"
-            })
         })
     }
 
@@ -264,7 +249,6 @@ class Calendar extends Component {
                                         key={date}
                                         onClick={() => {
                                             this.handleDateClick(date)
-                                            this.inputData()
                                         }
                                         }
                                     >

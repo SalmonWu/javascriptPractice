@@ -5,6 +5,25 @@ import "font-awesome/css/font-awesome.css";
 import Calendar from "./calendar";
 import data1 from './data/data1.json'
 
+let addData = [{
+    "guaranteed": false,
+    "date": "2018/07/01",
+    "price": 76263,
+    "availableVancancy": 16,
+    "totalVacnacy": 166,
+    "status": "預定"
+}, {
+    "guaranteed": false,
+    "date": "2018/07/02",
+    "price": 12345,
+    "availableVancancy": 16,
+    "totalVacnacy": 166,
+    "status": "預定"
+}]
+
+let inputData = [...addData, ...data1]
+let resetData = [...addData]
+
 window.calendar = ReactDOM.render(<Calendar
     dataKeySetting={{
         // 保證出團
@@ -20,4 +39,8 @@ window.calendar = ReactDOM.render(<Calendar
         // 價格
         'price': 'price'
     }}
-    tripData={data1} />, document.getElementById("root"));
+
+    tripData={data1}
+// tripData={inputData}
+// tripData={resetData}
+/>, document.getElementById("root"));
