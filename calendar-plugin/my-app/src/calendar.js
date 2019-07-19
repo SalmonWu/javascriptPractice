@@ -1,14 +1,12 @@
-import React, { Component } from "react";
-import moment from "moment";
-import momentLocale from "moment/locale/zh-tw";
+import React, { Component } from 'react';
+import moment from 'moment';
+import momentLocale from 'moment/locale/zh-tw';
 import _ from 'lodash';
 
 class Calendar extends Component {
     constructor(props) {
         super(props)
-
         moment.updateLocale('zh-tw', momentLocale);
-
         this.switch = this.switch.bind(this)
         this.changeMonth = this.changeMonth.bind(this)
         this.prevMonth = this.prevMonth.bind(this)
@@ -24,8 +22,6 @@ class Calendar extends Component {
             max: null
         },
         dateSelect: null,
-        // consoleSelectDate: () => {
-        // },
         calendarDisplay: true,
         initYearMonth: '2018-07'
     }
@@ -40,7 +36,7 @@ class Calendar extends Component {
             },
             dataKeySetting: this.props.dataKeySetting
         }, () => {
-            // console.log(this.state.parsed)
+            console.log(this.state.parsed)
         })
     }
 
@@ -62,27 +58,45 @@ class Calendar extends Component {
         })
     }
 
-    prevMonth() {
+    prevMonth(e) {
         if (this
             .getDateMoment()
             .subtract(1, 'month')
             .isBetween(this.state.range.min, this.state.range.max)) {
-
             this.setState({
                 initYearMonth: this.getDateMoment().subtract(1, 'month').format('YYYY-MM')
-            })
+            },
+                () => {
+                    let pool = []
+                    _.map(this.state.parsed, ((row, key) => {
+                        if (moment(key).format('YYYY-MM') === this.state.initYearMonth) {
+                            pool.push(row)
+                        }
+                    }))
+                    console.log(e, pool, this)
+                }
+            )
         }
     }
 
-    nextMonth() {
+    nextMonth(e) {
         if (this
             .getDateMoment().add(1, 'month')
             .isBetween(this.state.range.min, this.state.range.max)) {
             this.setState({
                 initYearMonth: this.getDateMoment().add(1, 'month').format('YYYY-MM')
-            })
+            },
+                () => {
+                    let pool = []
+                    _.map(this.state.parsed, ((row, key) => {
+                        if (moment(key).format('YYYY-MM') === this.state.initYearMonth) {
+                            pool.push(row)
+                        }
+                    }))
+                    console.log(e, pool, this)
+                }
+            )
         }
-        return this.getDateMoment().format('YYYY-MM')
     }
 
     handleDateClick(date) {
@@ -90,7 +104,8 @@ class Calendar extends Component {
             dateSelect: this.getDateMoment(date + 1)
         },
             () => {
-                // console.log(this.state.dateSelect)
+                console.log(this.state.dateSelect.format("YYYY/MM/DD"))
+                console.log(this.getDataFromDate(date + 1))
             })
     }
 
@@ -192,8 +207,8 @@ class Calendar extends Component {
                     </button>
                 </div>
                 <div className="nv">
-                    <button type="button" className="bt bt-prev" onClick={() => {
-                        this.prevMonth()
+                    <button type="button" className="bt bt-prev" onClick={(e) => {
+                        this.prevMonth(e.target)
                     }}></button>
                     <ul className="nvb months">
                         <li className="nvt">
@@ -218,8 +233,8 @@ class Calendar extends Component {
                             }>{this.nextMonthMoment().format('YYYY MM月')}</span>
                         </li>
                     </ul>
-                    <button type="button" className="bt bt-next" onClick={() => {
-                        this.nextMonth()
+                    <button type="button" className="bt bt-next" onClick={(e) => {
+                        this.nextMonth(e.target)
                     }}></button>
                 </div>
                 <div className="cy-table">
