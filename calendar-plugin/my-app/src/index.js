@@ -7,12 +7,13 @@ import data1 from './data/data1.json'
 import axios from 'axios';
 
 
-// let asyncData = []
-// asyncData = response.data
+let asyncData = []
 
 axios.get('./data/data1.json')
     .then(response => {
-        console.log(response.data)
+        asyncData = response.data
+        // console.log(response.data)
+        console.log(asyncData)
     })
     .catch(error => {
         console.log(error.data)
@@ -53,8 +54,8 @@ window.calendar = ReactDOM.render(<Calendar
         'price': 'price'
     }}
 
-    tripData={data1}
-// tripData={asyncData}
+    // tripData={data1}
+    tripData={asyncData}
 // tripData={inputData}
 // tripData={resetData}
 />, document.getElementById("root"));
