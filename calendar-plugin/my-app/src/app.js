@@ -44,6 +44,7 @@ class App extends Component {
                 tripData={this.state.data}
             // tripData={inputData}
             // tripData={resetData}
+            initYearMonth = {'2018-09'}
             ></Calendar>
         } else {
             return <div>Loading</div>

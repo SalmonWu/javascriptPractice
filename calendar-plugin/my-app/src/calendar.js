@@ -33,7 +33,8 @@ class Calendar extends Component {
             raw: this.props.tripData,
             parsed: this.splitData(this.props.tripData),
             availableMonths: this.parseAvailableMonths(this.props.tripData),
-            dataKeySetting: this.props.dataKeySetting
+            dataKeySetting: this.props.dataKeySetting,
+            initYearMonth: this.props.initYearMonth
         }, () => {
             // console.log(this.state.parsed)
 
