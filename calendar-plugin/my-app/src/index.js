@@ -5,19 +5,12 @@ import "font-awesome/css/font-awesome.css";
 import Calendar from "./calendar";
 import data1 from './data/data1.json'
 import axios from 'axios';
+import App from './app'
 
 
 let asyncData = []
 
-axios.get('./data/data1.json')
-    .then(response => {
-        asyncData = response.data
-        // console.log(response.data)
-        console.log(asyncData)
-    })
-    .catch(error => {
-        console.log(error.data)
-    })
+
 
 // let addData = [{
 //     "guaranteed": false,
@@ -38,24 +31,4 @@ axios.get('./data/data1.json')
 // let inputData = [...addData, ...data1]
 // let resetData = [...addData]
 
-window.calendar = ReactDOM.render(<Calendar
-    dataKeySetting={{
-        // 保證出團
-        'guaranteed': 'guaranteed',
-        //日期
-        'date': 'date',
-        // 狀態
-        'status': 'status',
-        // 可賣團位
-        'available': 'availableVancancy',
-        // 團位
-        'total': 'totalVacnacy',
-        // 價格
-        'price': 'price'
-    }}
-
-    // tripData={data1}
-    tripData={asyncData}
-// tripData={inputData}
-// tripData={resetData}
-/>, document.getElementById("root"));
+window.calendar = ReactDOM.render(<App />, document.getElementById("root"));

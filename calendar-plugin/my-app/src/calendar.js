@@ -21,22 +21,48 @@ class Calendar extends Component {
             min: null,
             max: null
         },
+        availableMonths: {},
         dateSelect: null,
         calendarDisplay: true,
-        initYearMonth: '2018-07'
+        // initYearMonth: '2018-12'
+        initYearMonth: '2019-01'
     }
 
     componentWillMount() {
         this.setState({
             raw: this.props.tripData,
             parsed: this.splitData(this.props.tripData),
-            range: {
-                min: this.parseMinDate(this.props.tripData),
-                max: this.parseMaxDate(this.props.tripData),
-            },
+            availableMonths: this.parseAvailableMonths(this.props.tripData),
             dataKeySetting: this.props.dataKeySetting
         }, () => {
-            console.log(this.state.parsed)
+            // console.log(this.state.parsed)
+
+            let months = this.sortMonthsKey(this.state.availableMonths)
+
+            months = months.map((v) => {
+                return parseInt(moment(v).format('YYYYMM'))
+            })
+
+            let thisYearMonth = parseInt(moment(this.state.initYearMonth, 'YYYY-MM').format('YYYYMM'))
+            let carryMonthIndex = _.sortedIndex(months, thisYearMonth)
+
+            if (months[carryMonthIndex] != thisYearMonth) {
+                let after = months[carryMonthIndex]
+                let before = carryMonthIndex > 0 ? months[carryMonthIndex - 1] : months[carryMonthIndex]
+
+                after = moment(after, 'YYYYMM').format('YYYY-MM')
+                before = moment(before, 'YYYYMM').format('YYYY-MM')
+
+                if (this.state.availableMonths[before] > this.state.availableMonths[after]) {
+                    this.setState({
+                        initYearMonth: before
+                    })
+                } else {
+                    this.setState({
+                        initYearMonth: after
+                    })
+                }
+            } 
         })
     }
 
@@ -59,44 +85,35 @@ class Calendar extends Component {
     }
 
     prevMonth(e) {
-        if (this
-            .getDateMoment()
-            .subtract(1, 'month')
-            .isBetween(this.state.range.min, this.state.range.max)) {
-            this.setState({
-                initYearMonth: this.getDateMoment().subtract(1, 'month').format('YYYY-MM')
-            },
-                () => {
-                    let pool = []
-                    _.map(this.state.parsed, ((row, key) => {
-                        if (moment(key).format('YYYY-MM') === this.state.initYearMonth) {
-                            pool.push(row)
-                        }
-                    }))
-                    console.log(e, pool, this)
-                }
-            )
-        }
+        this.setState({
+            initYearMonth: this.prevMonthMoment().format('YYYY-MM')
+        },
+            () => {
+                let pool = []
+                _.map(this.state.parsed, ((row, key) => {
+                    if (moment(key).format('YYYY-MM') === this.state.initYearMonth) {
+                        pool.push(row)
+                    }
+                }))
+                console.log(e, pool, this)
+            }
+        )
     }
 
     nextMonth(e) {
-        if (this
-            .getDateMoment().add(1, 'month')
-            .isBetween(this.state.range.min, this.state.range.max)) {
-            this.setState({
-                initYearMonth: this.getDateMoment().add(1, 'month').format('YYYY-MM')
-            },
-                () => {
-                    let pool = []
-                    _.map(this.state.parsed, ((row, key) => {
-                        if (moment(key).format('YYYY-MM') === this.state.initYearMonth) {
-                            pool.push(row)
-                        }
-                    }))
-                    console.log(e, pool, this)
-                }
-            )
-        }
+        this.setState({
+            initYearMonth: this.nextMonthMoment().format('YYYY-MM')
+        },
+            () => {
+                let pool = []
+                _.map(this.state.parsed, ((row, key) => {
+                    if (moment(key).format('YYYY-MM') === this.state.initYearMonth) {
+                        pool.push(row)
+                    }
+                }))
+                console.log(e, pool, this)
+            }
+        )
     }
 
     handleDateClick(date) {
@@ -117,35 +134,101 @@ class Calendar extends Component {
         return this.generate1toNArray(this.currentDayCount())
     }
 
-    getDateMoment(date) {
-        return moment(this.state.initYearMonth + '-' + date, 'YYYY-MM-DD')
-    }
-
     generate1toNArray(n) {
         return [...Array(n).keys()]
     }
 
-    prevMonthMoment() {
-        return this.getDateMoment().subtract(1, 'month')
+    getDateMoment(date) {
+        return moment(this.state.initYearMonth + '-' + date, 'YYYY-MM-DD')
     }
 
+    currentDateMoment() {
+        let months = _.keys(this.state.availableMonths)
+
+        months = _.sortBy(months, (o) => {
+            return parseInt(moment(o).format('YYYYMM'))
+        })
+
+        let index = months.indexOf(this.state.initYearMonth)
+
+        if (index == 0) {
+            return moment(months[index + 1])
+        } else if (index == months.length - 1) {
+            return moment(months[index - 1])
+        } else {
+            return moment(months[index])
+        }
+    }
+
+    prevMonthMoment() {
+        let months = _.keys(this.state.availableMonths)
+
+        months = _.sortBy(months, (o) => {
+            return parseInt(moment(o).format('YYYYMM'))
+        })
+
+        let index = months.indexOf(this.state.initYearMonth)
+
+        if (index == months.length - 1) {
+            return moment(months[index - 2])
+        } else if (index >= 1) {
+            return moment(months[index - 1])
+        } else {
+            return moment(months[index])
+        }
+    }
+
+    /**
+     * 
+     */
     nextMonthMoment() {
-        return this.getDateMoment().add(1, 'month')
+        let months = _.keys(this.state.availableMonths)
+
+        months = _.sortBy(months, (o) => {
+            return parseInt(moment(o).format('YYYYMM'))
+        })
+
+        let index = months.indexOf(this.state.initYearMonth)
+
+        if (index == 0) {
+            return moment(months[index + 2])
+        } else if (index < months.length - 1) {
+            return moment(months[index + 1])
+        } else {
+            return moment(months[index])
+        }
     }
 
     splitData(raw) {
         let pool = {}
-        let min
 
         _.map(raw, (value, key) => {
             let date = moment(value.date, 'YYYY/MM/DD').format('YYYY-MM-DD')
 
             pool[date] = pool[date] ? pool[date] : value
-
-            min = moment(min || value.date, 'YYYY/MM/DD').isAfter(value.date) ? value.date : min
         })
 
         return pool
+    }
+
+    sortMonthsKey(months) {
+        let m = _.keys(months)
+
+        return _.sortBy(m, (o) => {
+            return parseInt(moment(o).format('YYYYMM'))
+        })
+    }
+
+    parseAvailableMonths(raw) {
+        let month = {}
+
+        _.map(raw, (value, key) => {
+            let old = month[moment(value.date, 'YYYY/MM/DD').format('YYYY-MM')] || 0
+
+            month[moment(value.date, 'YYYY/MM/DD').format('YYYY-MM')] = old + 1
+        })
+
+        return month
     }
 
     parseMinDate(raw) {
@@ -195,6 +278,19 @@ class Calendar extends Component {
     }
 
     render() {
+        let generateTab = (moment) => {
+            return (
+                <li className="nvt">
+                    <span className={
+                        `nvt-link ${moment && this.getDateMoment().isSame(moment) ? 'active' : ''}`
+                    } onClick={() => {
+                        this.changeMonth(moment.format('YYYY-MM'))
+                    }
+                    }>{moment.format('YYYY MM月')}</span>
+                </li>
+            )
+        }
+
         return (
             <div className={`calendar${this.state.calendarDisplay ? '' : ' display-list'}`}>
                 <div className="cly-header">
@@ -211,27 +307,9 @@ class Calendar extends Component {
                         this.prevMonth(e.target)
                     }}></button>
                     <ul className="nvb months">
-                        <li className="nvt">
-                            <span className={`nvt-link 
-                            ${this.getDateMoment().isSame(this.prevMonthMoment()) ? 'active' : ''}`}
-                                onClick={() => {
-                                    this.changeMonth(this.prevMonthMoment().format('YYYY-MM'))
-                                }
-                                }>{this.prevMonthMoment().format('YYYY MM月')}</span>
-                        </li>
-                        <li className="nvt">
-                            <span className={
-                                `nvt-link ${this.getDateMoment().isSame(this.getDateMoment()) ? 'active' : ''}`
-                            }>{this.getDateMoment().format('YYYY MM月')}</span>
-                        </li>
-                        <li className="nvt">
-                            <span className={
-                                `nvt-link ${this.getDateMoment().isSame(this.nextMonthMoment()) ? 'active' : ''}`
-                            } onClick={() => {
-                                this.changeMonth(this.nextMonthMoment().format('YYYY-MM'))
-                            }
-                            }>{this.nextMonthMoment().format('YYYY MM月')}</span>
-                        </li>
+                        {generateTab(this.prevMonthMoment())}
+                        {generateTab(this.currentDateMoment())}
+                        {generateTab(this.nextMonthMoment())}
                     </ul>
                     <button type="button" className="bt bt-next" onClick={(e) => {
                         this.nextMonth(e.target)
