@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Calendar from './calendar'
 import axios from 'axios'
-import data1 from './data/data1.json'
 
 class App extends Component {
     state = {
@@ -9,7 +8,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        axios.get('./data/data5.json')
+        axios.get('./data/data1.json')
             .then(response => {
                 this.putData(response.data)
             })
@@ -21,8 +20,27 @@ class App extends Component {
     putData(data) {
         this.setState({ data })
     }
-    
+
     render() {
+        // let addData = [{
+        //     "guaranteed": false,
+        //     "date": "2018/07/01",
+        //     "price": 76263,
+        //     "availableVancancy": 16,
+        //     "totalVacnacy": 166,
+        //     "status": "預定"
+        // }, {
+        //     "guaranteed": false,
+        //     "date": "2018/07/02",
+        //     "price": 12345,
+        //     "availableVancancy": 16,
+        //     "totalVacnacy": 166,
+        //     "status": "預定"
+        // }]
+
+        // let inputData = [...addData, ...this.state.data]
+        // let resetData = [...addData]
+
         if (this.state.data.length) {
             return <Calendar
                 dataKeySetting={{
@@ -40,11 +58,10 @@ class App extends Component {
                     'price': 'price'
                 }}
 
-                // tripData={data1}
                 tripData={this.state.data}
-            // tripData={inputData}
-            // tripData={resetData}
-            initYearMonth = {'2018-09'}
+                // tripData={inputData}
+                // tripData={resetData}
+                initYearMonth={'2018-07'}
             ></Calendar>
         } else {
             return <div>Loading</div>
